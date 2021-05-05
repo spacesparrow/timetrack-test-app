@@ -126,6 +126,9 @@
     "laminas/laminas-zendframework-bridge": {
         "version": "1.2.0"
     },
+    "nikic/php-parser": {
+        "version": "v4.10.5"
+    },
     "phpstan/phpdoc-parser": {
         "version": "0.5.4"
     },
@@ -177,6 +180,9 @@
     },
     "symfony/dependency-injection": {
         "version": "v4.4.22"
+    },
+    "symfony/deprecation-contracts": {
+        "version": "v2.4.0"
     },
     "symfony/doctrine-bridge": {
         "version": "v4.4.22"
@@ -250,6 +256,15 @@
     "symfony/intl": {
         "version": "v4.4.22"
     },
+    "symfony/maker-bundle": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
+        }
+    },
     "symfony/mime": {
         "version": "v4.4.22"
     },
@@ -300,7 +315,28 @@
             "config/routes.yaml"
         ]
     },
+    "symfony/security-bundle": {
+        "version": "4.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.4",
+            "ref": "7b4408dc203049666fe23fabed23cbadc6d8440f"
+        },
+        "files": [
+            "config/packages/security.yaml"
+        ]
+    },
     "symfony/security-core": {
+        "version": "v4.4.22"
+    },
+    "symfony/security-csrf": {
+        "version": "v4.4.22"
+    },
+    "symfony/security-guard": {
+        "version": "v4.4.20"
+    },
+    "symfony/security-http": {
         "version": "v4.4.22"
     },
     "symfony/service-contracts": {
