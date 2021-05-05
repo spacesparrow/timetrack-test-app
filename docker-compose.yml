@@ -4,8 +4,8 @@ services:
     image: mysql:8.0
     restart: on-failure
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: timetrack_app
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
 
   nginx:
     image: nginx:1.19.0-alpine
@@ -14,7 +14,7 @@ services:
       - './public/:/usr/src/app'
       - './docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro'
     ports:
-      - '80:80'
+      - '${NGINX_PORT}:80'
     depends_on:
       - php
 
@@ -27,4 +27,4 @@ services:
     restart: on-failure
     env_file:
       - .env
-    user: 1000:1000
+    user: ${LOCAL_USER}
