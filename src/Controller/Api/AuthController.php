@@ -8,6 +8,8 @@ use App\Entity\User;
 use App\Form\Auth\RegisterType;
 use App\Traits\AuthServiceAwareTrait;
 use Doctrine\ORM\EntityManagerInterface;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,6 +24,55 @@ class AuthController extends BaseController
 
     /**
      * @Route("/register", name="register", methods={"POST"})
+     * @OA\Post(
+     *     tags={"Auth"},
+     *     summary="Register user",
+     *     description="Register and login new user in the system",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref=@Model(type=RegisterType::class))
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="User successfully created and logged in",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/Token")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Validation failed",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(property="code", type="integer", example=400),
+     *                 @OA\Property(property="message", type="string", example="Validation Failed"),
+     *                 @OA\Property(
+     *                     property="errors",
+     *                     type="object",
+     *                     @OA\Property(
+     *                         property="children",
+     *                         type="object",
+     *                         @OA\Property(
+     *                             property="email",
+     *                             type="array",
+     *                             @OA\Items(example="This email is used by another user")
+     *                         ),
+     *                         @OA\Property(
+     *                             property="password",
+     *                             type="array",
+     *                             @OA\Items(example="This value is required")
+     *                         ),
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
      *
      * @param Request $request
      * @param EntityManagerInterface $manager

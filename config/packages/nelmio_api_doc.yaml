@@ -13,10 +13,11 @@ nelmio_api_doc:
     paths:
       /api/auth/login:
         post:
-          operationId: postCredentialsItem
-          summary: Get JWT token to login.
+          tags:
+            - Auth
+          summary: Login user
+          description: Login user in the system
           requestBody:
-            description: Create new JWT Token
             content:
               application/json:
                 schema:
@@ -29,7 +30,7 @@ nelmio_api_doc:
                   schema:
                     $ref: '#/components/schemas/Token'
             '401':
-              description:
+              description: Invalid credentials
               content:
                 application/json:
                   schema:
@@ -42,13 +43,16 @@ nelmio_api_doc:
             token:
               type: string
               readOnly: true
+              example: exampleTokenString
         Credentials:
           type: object
           properties:
             email:
               type: string
+              example: example@domain.com
             password:
               type: string
+              example: somepassword
         BadCredentials:
           type: object
           properties:

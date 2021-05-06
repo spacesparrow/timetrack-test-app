@@ -30,10 +30,15 @@ class RegisterType extends AbstractType
                 'email',
                 EmailType::class,
                 [
+                    'required' => true,
                     'constraints' => [
                         new Constraints\NotBlank(),
                         new Constraints\Email(),
                         new Constraints\Length(['min' => User::MIN_EMAIL_LENGTH, 'max' => User::MAX_EMAIL_LENGTH])
+                    ],
+                    'documentation' => [
+                        'type' => 'string',
+                        'example' => 'example@domain.com'
                     ]
                 ]
             )
@@ -41,9 +46,14 @@ class RegisterType extends AbstractType
                 'password',
                 PasswordType::class,
                 [
+                    'required' => true,
                     'constraints' => [
                         new Constraints\NotBlank(),
                         new Constraints\Length(['min' => User::MIN_PASSWORD_LENGTH, 'max' => User::MAX_PASSWORD_LENGTH])
+                    ],
+                    'documentation' => [
+                        'type' => 'string',
+                        'example' => 'somepassword'
                     ]
                 ]
             );
