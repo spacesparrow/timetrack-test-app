@@ -48,6 +48,13 @@ class AuthController extends BaseController
         $manager->persist($user);
         $manager->flush();
 
-        return $this->createdResponse($user);
+        return $this->redirectToRoute(
+            'api_auth_login',
+            [
+                'email' => $form->get('email')->getData(),
+                'password' => $form->get('password')->getData()
+            ],
+            Response::HTTP_TEMPORARY_REDIRECT
+        );
     }
 }
