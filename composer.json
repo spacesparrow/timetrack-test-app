@@ -21,7 +21,8 @@
         "symfony/proxy-manager-bridge": "4.4.*",
         "symfony/security-bundle": "4.4.*",
         "symfony/validator": "4.4.*",
-        "symfony/yaml": "4.4.*"
+        "symfony/yaml": "4.4.*",
+      "ext-json": "*"
     },
     "config": {
         "preferred-install": {

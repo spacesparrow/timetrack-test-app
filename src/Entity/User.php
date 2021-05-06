@@ -4,36 +4,47 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="users")
+ * @Serializer\ExclusionPolicy("all")
  */
 class User implements UserInterface
 {
+    public const MIN_EMAIL_LENGTH = 5;
+    public const MAX_EMAIL_LENGTH = 180;
+    public const MIN_PASSWORD_LENGTH = 6;
+    public const MAX_PASSWORD_LENGTH = 50;
+
     /**
+     * @var int
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
+     * @var string|null
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Serializer\Expose()
      */
-    private $email;
+    private ?string $email;
 
     /**
+     * @var array
      * @ORM\Column(type="json")
      */
-    private $roles = [];
+    private array $roles = [];
 
     /**
-     * @var string The hashed password
+     * @var string|null The hashed password
      * @ORM\Column(type="string")
      */
-    private $password;
+    private ?string $password;
 
     public function getId(): ?int
     {
@@ -110,7 +121,7 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
