@@ -15,8 +15,13 @@ class BaseController extends AbstractFOSRestController
         return $this->handleView($this->view($form, Response::HTTP_BAD_REQUEST));
     }
 
-    protected function createdResponse(object $object): Response
+    protected function createdResponse(string $url): Response
     {
-        return $this->handleView($this->view($object, Response::HTTP_CREATED));
+        return $this->handleView($this->view(null, Response::HTTP_CREATED, ['Location' => $url]));
+    }
+
+    protected function showResponse(object $object): Response
+    {
+        return $this->handleView($this->view($object, Response::HTTP_OK));
     }
 }
