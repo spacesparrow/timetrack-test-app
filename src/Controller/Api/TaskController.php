@@ -9,6 +9,7 @@ use App\Entity\User;
 use App\Form\Task\CreateTaskType;
 use App\Security\Voter\TaskVoter;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,11 +31,21 @@ class TaskController extends BaseController
      * )
      *
      * @param Request $request
+     * @param PaginatorInterface $paginator
      * @return Response
      */
-    public function indexAction(Request $request): Response
+    public function indexAction(Request $request, PaginatorInterface $paginator): Response
     {
+        /** @var User $user */
+        $user = $this->getUser();
+        $tasks = $user->getTasks();
 
+        $paginatedTasks = $paginator->paginate(
+            $tasks,
+            $request->request->getInt('page', 1)
+        );
+
+        return $this->showResponse($paginatedTasks);
     }
 
     /**

@@ -1,0 +1,4 @@
+knp_paginator:
+  page_range: 10
+  default_options:
+    page_name: page
