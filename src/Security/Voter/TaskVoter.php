@@ -16,11 +16,22 @@ class TaskVoter extends Voter
     public const ACTION_VIEW = 'view';
     public const SUPPORTED_ACTIONS = [self::ACTION_CREATE, self::ACTION_VIEW];
 
+    /**
+     * @param string $attribute
+     * @param mixed $subject
+     * @return bool
+     */
     protected function supports($attribute, $subject): bool
     {
         return in_array($attribute, self::SUPPORTED_ACTIONS) && $subject instanceof Task;
     }
 
+    /**
+     * @param string $attribute
+     * @param mixed $subject
+     * @param TokenInterface $token
+     * @return bool
+     */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
@@ -42,11 +53,21 @@ class TaskVoter extends Voter
         }
     }
 
+    /**
+     * @param Task $task
+     * @param UserInterface $user
+     * @return bool
+     */
     private function canCreate(Task $task, UserInterface $user): bool
     {
         return true;
     }
 
+    /**
+     * @param Task $task
+     * @param UserInterface $user
+     * @return bool
+     */
     private function canView(Task $task, UserInterface $user): bool
     {
         return $user === $task->getUser();

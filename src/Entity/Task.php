@@ -52,12 +52,16 @@ class Task
     private string $title;
 
     /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=255)
      * @Serializer\Expose()
      */
     private string $comment;
 
     /**
+     * @var int
+     *
      * @ORM\Column(type="integer", name="time_spent")
      * @Serializer\Expose()
      */
@@ -73,16 +77,26 @@ class Task
      */
     protected $createdAt;
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return User|null
+     */
     public function getUser(): ?User
     {
         return $this->user;
     }
 
+    /**
+     * @param User $user
+     * @return $this
+     */
     public function setUser(User $user): self
     {
         $this->user = $user;
@@ -90,11 +104,18 @@ class Task
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getTitle(): ?string
     {
         return $this->title;
     }
 
+    /**
+     * @param string $title
+     * @return $this
+     */
     public function setTitle(string $title): self
     {
         $this->title = $title;
@@ -102,11 +123,18 @@ class Task
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getComment(): ?string
     {
         return $this->comment;
     }
 
+    /**
+     * @param string $comment
+     * @return $this
+     */
     public function setComment(string $comment): self
     {
         $this->comment = $comment;
@@ -114,11 +142,18 @@ class Task
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getTimeSpent(): ?int
     {
         return $this->timeSpent;
     }
 
+    /**
+     * @param int $timeSpent
+     * @return $this
+     */
     public function setTimeSpent(int $timeSpent): self
     {
         $this->timeSpent = $timeSpent;
@@ -127,11 +162,10 @@ class Task
     }
 
     /**
-     * Sets createdAt.
-     *
+     * @param DateTime $createdAt
      * @return $this
      */
-    public function setCreatedAt(\DateTime $createdAt)
+    public function setCreatedAt(DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 
@@ -139,11 +173,9 @@ class Task
     }
 
     /**
-     * Returns createdAt.
-     *
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }

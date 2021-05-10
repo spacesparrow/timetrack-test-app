@@ -25,6 +25,7 @@ class User implements UserInterface
 
     /**
      * @var int
+     *
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -33,6 +34,7 @@ class User implements UserInterface
 
     /**
      * @var string|null
+     *
      * @ORM\Column(type="string", length=180, unique=true)
      * @Serializer\Expose()
      */
@@ -40,12 +42,14 @@ class User implements UserInterface
 
     /**
      * @var array
+     *
      * @ORM\Column(type="json")
      */
     private array $roles = [];
 
     /**
      * @var string|null The hashed password
+     *
      * @ORM\Column(type="string")
      */
     private ?string $password;
@@ -57,21 +61,34 @@ class User implements UserInterface
      */
     private Collection $tasks;
 
+    /**
+     * User constructor.
+     */
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
     }
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return string|null
+     */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
+    /**
+     * @param string $email
+     * @return $this
+     */
     public function setEmail(string $email): self
     {
         $this->email = $email;
@@ -83,6 +100,7 @@ class User implements UserInterface
      * A visual identifier that represents this user.
      *
      * @see UserInterface
+     * @return string
      */
     public function getUsername(): string
     {
@@ -91,6 +109,7 @@ class User implements UserInterface
 
     /**
      * @see UserInterface
+     * @return array
      */
     public function getRoles(): array
     {
@@ -101,6 +120,10 @@ class User implements UserInterface
         return array_unique($roles);
     }
 
+    /**
+     * @param array $roles
+     * @return User
+     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -110,12 +133,17 @@ class User implements UserInterface
 
     /**
      * @see UserInterface
+     * @return string
      */
     public function getPassword(): string
     {
         return (string) $this->password;
     }
 
+    /**
+     * @param string $password
+     * @return $this
+     */
     public function setPassword(string $password): self
     {
         $this->password = $password;
@@ -128,6 +156,7 @@ class User implements UserInterface
      * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
      *
      * @see UserInterface
+     * @return string|null
      */
     public function getSalt(): ?string
     {
@@ -151,6 +180,10 @@ class User implements UserInterface
         return $this->tasks;
     }
 
+    /**
+     * @param Task $task
+     * @return $this
+     */
     public function addTask(Task $task): self
     {
         if (!$this->tasks->contains($task)) {
@@ -161,13 +194,14 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @param Task $task
+     * @return $this
+     */
     public function removeTask(Task $task): self
     {
-        if ($this->tasks->removeElement($task)) {
-            // set the owning side to null (unless already changed)
-            if ($task->getUser() === $this) {
-                $task->setUser(null);
-            }
+        if ($this->tasks->removeElement($task) && $task->getUser() === $this) {
+            $task->setUser(null);
         }
 
         return $this;

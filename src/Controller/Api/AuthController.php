@@ -6,7 +6,6 @@ namespace App\Controller\Api;
 
 use App\Entity\User;
 use App\Form\Auth\RegisterType;
-use App\Traits\AuthServiceAwareTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
@@ -20,8 +19,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class AuthController extends BaseController
 {
-    use AuthServiceAwareTrait;
-
     /**
      * @Route("/register", name="register", methods={"POST"})
      * @OA\Post(

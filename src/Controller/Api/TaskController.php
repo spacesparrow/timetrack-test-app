@@ -203,21 +203,4 @@ class TaskController extends BaseController
             )
         );
     }
-
-    /**
-     * @Route("/{id}", name="update", methods={"PUT"}, requirements={"id"="\d+"})
-     * @OA\Put(
-     *     tags={"Tasks"},
-     *     summary="Update existing task",
-     *     description="Update existing task with time spent"
-     * )
-     *
-     * @param Request $request
-     * @param Task $task
-     * @return Response
-     */
-    public function updateAction(Request $request, Task $task): Response
-    {
-
-    }
 }

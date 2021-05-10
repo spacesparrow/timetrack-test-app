@@ -16,13 +16,22 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class RegisterType extends AbstractType
 {
+    /** @var AuthService  */
     private AuthService $authService;
 
+    /**
+     * RegisterType constructor.
+     * @param AuthService $authService
+     */
     public function __construct(AuthService $authService)
     {
         $this->authService = $authService;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -59,6 +68,9 @@ class RegisterType extends AbstractType
             );
     }
 
+    /**
+     * @param OptionsResolver $resolver
+     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -69,6 +81,10 @@ class RegisterType extends AbstractType
         ]);
     }
 
+    /**
+     * @param User $user
+     * @param ExecutionContextInterface $context
+     */
     public function validate(User $user, ExecutionContextInterface $context): void
     {
         if ($this->authService->checkEmailUsed($user->getEmail())) {

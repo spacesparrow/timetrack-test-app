@@ -10,6 +10,9 @@ class TaskActionNotImplementedException extends NotImplementedException
 {
     protected $message = 'This action is not implemented for tasks now.';
 
+    /**
+     * TaskActionNotImplementedException constructor.
+     */
     public function __construct()
     {
         parent::__construct($this->message);
