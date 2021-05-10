@@ -10,6 +10,7 @@ use App\Form\Task\CreateTaskType;
 use App\Security\Voter\TaskVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,7 +28,34 @@ class TaskController extends BaseController
      * @OA\Get(
      *     tags={"Tasks"},
      *     summary="List all user tasks",
-     *     description="List all tasks created by logged in user"
+     *     description="List all tasks created by logged in user",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Paginated list of Task entities created by logged in user",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(type="integer", property="currentPageNumber", example=1),
+     *                 @OA\Property(type="integer", property="numItemsPerPage", example=10),
+     *                 @OA\Property(type="integer", property="totalCount", example=5),
+     *                 @OA\Property(type="integer", property="pageRange", example=10),
+     *                 @OA\Property(
+     *                     type="array",
+     *                     property="items",
+     *                     @OA\Items(ref=@Model(type=Task::class))
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unathorized request",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *              @OA\Property(property="code", type="integer", example=401),
+     *              @OA\Property(property="message", type="string", example="Expired JWT Token"),
+     *         )
+     *     ),
      * )
      *
      * @param Request $request
@@ -53,7 +81,24 @@ class TaskController extends BaseController
      * @OA\Get(
      *     tags={"Tasks"},
      *     summary="Display task",
-     *     description="Display task created by logged in user"
+     *     description="Display task created by logged in user",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Task entity returned",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref=@Model(type=Task::class))
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unathorized request",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *              @OA\Property(property="code", type="integer", example=401),
+     *              @OA\Property(property="message", type="string", example="Expired JWT Token"),
+     *         )
+     *     ),
      * )
      *
      * @param Task $task
@@ -72,7 +117,61 @@ class TaskController extends BaseController
      * @OA\Post(
      *     tags={"Tasks"},
      *     summary="Create new task",
-     *     description="Create new task for logged in user"
+     *     description="Create new task for logged in user",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref=@Model(type=CreateTaskType::class))
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Task successfully created"
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unathorized request",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *              @OA\Property(property="code", type="integer", example=401),
+     *              @OA\Property(property="message", type="string", example="Expired JWT Token"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation failed",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(property="code", type="integer", example=422),
+     *                 @OA\Property(property="message", type="string", example="Validation Failed"),
+     *                 @OA\Property(
+     *                     property="errors",
+     *                     type="object",
+     *                     @OA\Property(
+     *                         property="children",
+     *                         type="object",
+     *                         @OA\Property(
+     *                             property="title",
+     *                             type="array",
+     *                             @OA\Items(example="This value is required")
+     *                         ),
+     *                         @OA\Property(
+     *                             property="comment",
+     *                             type="array",
+     *                             @OA\Items(example="This value is required")
+     *                         ),
+     *                         @OA\Property(
+     *                             property="timeSpent",
+     *                             type="array",
+     *                             @OA\Items(example="This value should be equal or greater than zero")
+     *                         ),
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     )
      * )
      *
      * @param Request $request
@@ -86,11 +185,9 @@ class TaskController extends BaseController
 
         /** @var User $user */
         $user = $this->getUser();
-        $form = $this->createForm(CreateTaskType::class, $task);
-        $data = json_decode($request->getContent(), true);
-        $form->submit($data);
+        $form = $this->createSubmittedForm(CreateTaskType::class, $request, $task);
 
-        if (!$form->isSubmitted() || !$form->isValid()) {
+        if (!$form->isValid()) {
             return $this->badRequestResponse($form);
         }
 

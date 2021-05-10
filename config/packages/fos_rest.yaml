@@ -5,3 +5,17 @@ fos_rest:
   format_listener:
     rules:
       - { path: ^/api, prefer_extension: true, fallback_format: json, priorities: [ 'json', 'xml' ] }
+  view:
+    view_response_listener: true
+    failed_validation: 422
+    empty_content: 204
+  serializer:
+    serialize_null: true
+  exception:
+    enabled: true
+    exception_listener: false
+    serializer_error_renderer: true
+    serialize_exceptions: false
+    map_exception_codes: true
+    messages:
+      'Symfony\Component\HttpKernel\Exception\HttpException': true

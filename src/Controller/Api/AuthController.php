@@ -44,12 +44,12 @@ class AuthController extends BaseController
      *         )
      *     ),
      *     @OA\Response(
-     *         response=400,
+     *         response=422,
      *         description="Validation failed",
      *         @OA\MediaType(
      *             mediaType="application/json",
      *             @OA\Schema(
-     *                 @OA\Property(property="code", type="integer", example=400),
+     *                 @OA\Property(property="code", type="integer", example=422),
      *                 @OA\Property(property="message", type="string", example="Validation Failed"),
      *                 @OA\Property(
      *                     property="errors",
@@ -85,11 +85,9 @@ class AuthController extends BaseController
         UserPasswordEncoderInterface $passwordEncoder
     ): Response {
         $user = new User();
-        $form = $this->createForm(RegisterType::class, $user);
-        $data = json_decode($request->getContent(), true);
-        $form->submit($data);
+        $form = $this->createSubmittedForm(RegisterType::class, $request, $user);
 
-        if (!$form->isSubmitted() || !$form->isValid()) {
+        if (!$form->isValid()) {
             return $this->badRequestResponse($form);
         }
 
