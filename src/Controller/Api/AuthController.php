@@ -6,19 +6,31 @@ namespace App\Controller\Api;
 
 use App\Entity\User;
 use App\Form\Auth\RegisterType;
+use App\Service\AuthService;
 use Doctrine\ORM\EntityManagerInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @Route("/auth", name="api_auth_")
  */
 class AuthController extends BaseController
 {
+    /** @var AuthService */
+    private AuthService $authService;
+
+    /**
+     * AuthController constructor.
+     * @param AuthService $authService
+     */
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
     /**
      * @Route("/register", name="register", methods={"POST"})
      * @OA\Post(
@@ -73,13 +85,11 @@ class AuthController extends BaseController
      *
      * @param Request $request
      * @param EntityManagerInterface $manager
-     * @param UserPasswordEncoderInterface $passwordEncoder
      * @return Response
      */
     public function registerAction(
         Request $request,
-        EntityManagerInterface $manager,
-        UserPasswordEncoderInterface $passwordEncoder
+        EntityManagerInterface $manager
     ): Response {
         $user = new User();
         $form = $this->createSubmittedForm(RegisterType::class, $request, $user);
@@ -90,7 +100,7 @@ class AuthController extends BaseController
 
         /** @var User $user */
         $user = $form->getData();
-        $user->setPassword($passwordEncoder->encodePassword($user, $user->getPassword()));
+        $this->authService->encodeUserPassword($user);
         $manager->persist($user);
         $manager->flush();
 
