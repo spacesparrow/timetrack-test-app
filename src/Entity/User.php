@@ -58,6 +58,7 @@ class User implements UserInterface
      * @var Collection|Task[]
      *
      * @ORM\OneToMany(targetEntity=Task::class, mappedBy="user")
+     * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private Collection $tasks;
 

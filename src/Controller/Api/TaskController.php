@@ -31,7 +31,7 @@ class TaskController extends BaseController
      *     description="List all tasks created by logged in user",
      *     @OA\Response(
      *         response=200,
-     *         description="Paginated list of Task entities created by logged in user",
+     *         description="Paginated list of Task entities created by logged in user, ordered by created date desc",
      *         @OA\MediaType(
      *             mediaType="application/json",
      *             @OA\Schema(
@@ -106,7 +106,6 @@ class TaskController extends BaseController
      */
     public function showAction(Task $task): Response
     {
-        $user = $this->getUser();
         $this->denyAccessUnlessGranted(TaskVoter::ACTION_VIEW, $task);
 
         return $this->showResponse($task);
