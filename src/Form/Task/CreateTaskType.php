@@ -3,12 +3,15 @@
 namespace App\Form\Task;
 
 use App\Entity\Task;
+use DateTime;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class CreateTaskType extends AbstractType
 {
@@ -49,7 +52,8 @@ class CreateTaskType extends AbstractType
                     ]
                 ]
             )
-            ->add('timeSpent',
+            ->add(
+                'timeSpent',
                 IntegerType::class,
                 [
                     'required' => true,
@@ -62,6 +66,21 @@ class CreateTaskType extends AbstractType
                         'example' => 15
                     ]
                 ]
+            )
+            ->add(
+                'createdDate',
+                DateType::class,
+                [
+                    'widget' => 'single_text',
+                    'required' => true,
+                    'constraints' => [
+                        new Constraints\NotBlank(),
+                    ],
+                    'documentation' => [
+                        'type' => 'string',
+                        'example' => '2021-05-08'
+                    ]
+                ]
             );
     }
 
@@ -72,6 +91,22 @@ class CreateTaskType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Task::class,
+            'constraints' => [
+                new Constraints\Callback([$this, 'validate'])
+            ]
         ]);
+    }
+
+    /**
+     * @param Task $task
+     * @param ExecutionContextInterface $context
+     */
+    public function validate(Task $task, ExecutionContextInterface $context): void
+    {
+        if ($task->getCreatedDate() > new DateTime()) {
+            $context->buildViolation('Created date can not be greater that today')
+                ->atPath('createdDate')
+                ->addViolation();
+        }
     }
 }

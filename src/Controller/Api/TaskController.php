@@ -52,8 +52,10 @@ class TaskController extends BaseController
      *         description="Unathorized request",
      *         @OA\MediaType(
      *             mediaType="application/json",
-     *              @OA\Property(property="code", type="integer", example=401),
-     *              @OA\Property(property="message", type="string", example="Expired JWT Token"),
+     *                 @OA\Schema(
+     *                     @OA\Property(property="code", type="integer", example=401),
+     *                     @OA\Property(property="message", type="string", example="Expired JWT Token"),
+     *                 )
      *         )
      *     ),
      * )
@@ -95,17 +97,45 @@ class TaskController extends BaseController
      *         description="Unathorized request",
      *         @OA\MediaType(
      *             mediaType="application/json",
-     *              @OA\Property(property="code", type="integer", example=401),
-     *              @OA\Property(property="message", type="string", example="Expired JWT Token"),
+     *                 @OA\Schema(
+     *                     @OA\Property(property="code", type="integer", example=401),
+     *                     @OA\Property(property="message", type="string", example="Expired JWT Token"),
+     *                 )
      *         )
      *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Access denied request",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(property="code", type="integer", example=403),
+     *                 @OA\Property(property="message", type="string", example="Access Denied."),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Task was not found",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(property="code", type="integer", example=404),
+     *                 @OA\Property(property="message", type="string", example="Not Found")
+     *             )
+     *         )
+     *     )
      * )
      *
-     * @param Task $task
+     * @param Task|null $task
      * @return Response
      */
-    public function showAction(Task $task): Response
+    public function showAction(?Task $task = null): Response
     {
+        if (!$task) {
+            throw $this->createNotFoundException();
+        }
+
         $this->denyAccessUnlessGranted(TaskVoter::ACTION_VIEW, $task);
 
         return $this->showResponse($task);
@@ -133,8 +163,10 @@ class TaskController extends BaseController
      *         description="Unathorized request",
      *         @OA\MediaType(
      *             mediaType="application/json",
-     *              @OA\Property(property="code", type="integer", example=401),
-     *              @OA\Property(property="message", type="string", example="Expired JWT Token"),
+     *                 @OA\Schema(
+     *                     @OA\Property(property="code", type="integer", example=401),
+     *                     @OA\Property(property="message", type="string", example="Expired JWT Token"),
+     *                 )
      *         )
      *     ),
      *     @OA\Response(
@@ -165,6 +197,11 @@ class TaskController extends BaseController
      *                             property="timeSpent",
      *                             type="array",
      *                             @OA\Items(example="This value should be equal or greater than zero")
+     *                         ),
+     *                         @OA\Property(
+     *                             property="createdDate",
+     *                             type="array",
+     *                             @OA\Items(example="Created date can not be greater that today")
      *                         ),
      *                     )
      *                 )

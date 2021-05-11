@@ -7,19 +7,15 @@ namespace App\Entity;
 use App\Repository\TaskRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
 use JMS\Serializer\Annotation as Serializer;
+use OpenApi\Annotations as OA;
 
 /**
  * @ORM\Entity(repositoryClass=TaskRepository::class)
  * @ORM\Table(name="tasks")
- * @Serializer\ExclusionPolicy("all")
  */
 class Task
 {
-    use TimestampableEntity;
-
     public const MIN_TITLE_LENGTH = 5;
     public const MAX_TITLE_LENGTH = 255;
     public const MIN_COMMENT_LENGTH = 10;
@@ -31,15 +27,15 @@ class Task
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Serializer\Expose()
      */
     private int $id;
 
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="tasks")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="tasks", fetch="EXTRA_LAZY")
      * @ORM\JoinColumn(nullable=false)
+     * @Serializer\Exclude()
      */
     private User $user;
 
@@ -47,7 +43,6 @@ class Task
      * @var string
      *
      * @ORM\Column(type="string", length=255)
-     * @Serializer\Expose()
      */
     private string $title;
 
@@ -55,7 +50,6 @@ class Task
      * @var string
      *
      * @ORM\Column(type="string", length=255)
-     * @Serializer\Expose()
      */
     private string $comment;
 
@@ -63,19 +57,17 @@ class Task
      * @var int
      *
      * @ORM\Column(type="integer", name="time_spent")
-     * @Serializer\Expose()
      */
     private int $timeSpent;
 
     /**
-     * @var DateTime $createdAt
+     * @var DateTime|null $createdDate
      *
-     * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     * @Serializer\Expose()
-     * @Serializer\Type("DateTime")
+     * @ORM\Column(type="datetime", name="created_date")
+     * @Serializer\Type("DateTime<'Y-m-d'>")
+     * @OA\Property(example="2021-05-08")
      */
-    protected $createdAt;
+    private ?DateTime $createdDate;
 
     /**
      * @return int|null
@@ -162,21 +154,18 @@ class Task
     }
 
     /**
-     * @param DateTime $createdAt
-     * @return $this
+     * @return DateTime|null
      */
-    public function setCreatedAt(DateTime $createdAt): self
+    public function getCreatedDate(): ?DateTime
     {
-        $this->createdAt = $createdAt;
-
-        return $this;
+        return $this->createdDate;
     }
 
     /**
-     * @return DateTime
+     * @param DateTime|null $createdDate
      */
-    public function getCreatedAt(): DateTime
+    public function setCreatedDate(?DateTime $createdDate): void
     {
-        return $this->createdAt;
+        $this->createdDate = $createdDate;
     }
 }
