@@ -4,12 +4,6 @@ nelmio_api_doc:
       title: Symfony Timetrack Test App
       description: Symfony Timetrack Test App API docs
       version: 1.0.0
-    #    securityDefinitions:
-    #      Bearer:
-    #        type: apiKey
-    #        description: 'Authorization: Bearer {jwt}'
-    #        name: Authorization
-    #        in: header
     paths:
       /api/auth/login:
         post:
@@ -17,6 +11,7 @@ nelmio_api_doc:
             - Auth
           summary: Login user
           description: Login user in the system
+          security: []
           requestBody:
             content:
               application/json:
@@ -62,6 +57,13 @@ nelmio_api_doc:
             message:
               type: string
               example: "Invalid credentials."
+      securitySchemes:
+        Bearer:
+          type: http
+          scheme: bearer
+          bearerFormat: JWT
+    security:
+      - Bearer: [ ]
   areas: # to filter documented areas
     path_patterns:
       - ^/api(?!/doc$) # Accepts routes under /api except /api/doc

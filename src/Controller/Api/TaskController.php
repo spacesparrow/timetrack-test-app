@@ -11,6 +11,7 @@ use App\Security\Voter\TaskVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -59,6 +60,7 @@ class TaskController extends BaseController
      *         )
      *     ),
      * )
+     * @Security(name="Bearer")
      *
      * @param Request $request
      * @param PaginatorInterface $paginator
@@ -126,6 +128,7 @@ class TaskController extends BaseController
      *         )
      *     )
      * )
+     * @Security(name="Bearer")
      *
      * @param Task|null $task
      * @return Response
@@ -209,6 +212,7 @@ class TaskController extends BaseController
      *         )
      *     )
      * )
+     * @Security(name="Bearer")
      *
      * @param Request $request
      * @param EntityManagerInterface $manager

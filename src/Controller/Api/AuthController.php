@@ -9,6 +9,7 @@ use App\Form\Auth\RegisterType;
 use App\Service\AuthService;
 use Doctrine\ORM\EntityManagerInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -82,6 +83,7 @@ class AuthController extends BaseController
      *         )
      *     )
      * )
+     * @Security()
      *
      * @param Request $request
      * @param EntityManagerInterface $manager
