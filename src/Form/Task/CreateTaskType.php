@@ -63,7 +63,8 @@ class CreateTaskType extends AbstractType
                     ],
                     'documentation' => [
                         'type' => 'integer',
-                        'example' => 15
+                        'example' => 15,
+                        'minimum' => 0
                     ]
                 ]
             )
@@ -78,7 +79,8 @@ class CreateTaskType extends AbstractType
                     ],
                     'documentation' => [
                         'type' => 'string',
-                        'example' => '2021-05-08'
+                        'example' => '2021-05-08',
+                        'format' => 'date'
                     ]
                 ]
             );

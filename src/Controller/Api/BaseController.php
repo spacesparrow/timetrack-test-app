@@ -64,8 +64,7 @@ class BaseController extends AbstractFOSRestController
     {
         return $this->file(
             $responseDTO->getTempFile(),
-            $responseDTO->getFilename(),
-            ResponseHeaderBag::DISPOSITION_INLINE
+            $responseDTO->getFilename()
         );
     }
 }

@@ -163,7 +163,15 @@ class TaskController extends BaseController
      *     ),
      *     @OA\Response(
      *         response=201,
-     *         description="Task successfully created"
+     *         description="Task successfully created",
+     *         @OA\Header(
+     *             header="Location",
+     *             schema=@OA\Schema(
+     *                 type="string",
+     *                 example="http://localhost/api/tasks/1"
+     *             ),
+     *             description="URL to created task"
+     *         )
      *     ),
      *     @OA\Response(
      *         response=401,
@@ -259,6 +267,47 @@ class TaskController extends BaseController
      *         @OA\MediaType(
      *             mediaType="application/json",
      *             @OA\Schema(ref=@Model(type=ExportType::class))
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Export file generated",
+     *         @OA\Header(
+     *             header="Content-Type",
+     *             schema=@OA\Schema(
+     *                 type="string",
+     *                 example="application/pdf"
+     *             ),
+     *             description="Response MIME type, changing due to several export formats supported"
+     *         ),
+     *         @OA\Header(
+     *             header="Content-Disposition",
+     *             schema=@OA\Schema(
+     *                 type="string",
+     *                 example="attachment; filename=tasks_export.pdf",
+     *             ),
+     *             description="Describe that a client should initiate 'Save as' dialog"
+     *         ),
+     *         @OA\MediaType(
+     *             mediaType="application/pdf",
+     *             @OA\Schema(
+     *                 type="string",
+     *                 format="binary"
+     *             ),
+     *         ),
+     *         @OA\MediaType(
+     *             mediaType="text/plain;charset=UTF-8",
+     *             @OA\Schema(
+     *                 type="string",
+     *                 format="binary"
+     *             )
+     *         ),
+     *         @OA\MediaType(
+     *             mediaType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+     *             @OA\Schema(
+     *                 type="string",
+     *                 format="binary"
+     *             )
      *         )
      *     ),
      *     @OA\Response(

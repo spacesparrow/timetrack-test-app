@@ -62,7 +62,8 @@ class RegisterType extends AbstractType
                     ],
                     'documentation' => [
                         'type' => 'string',
-                        'example' => 'somepassword'
+                        'example' => 'somepassword',
+                        'format' => 'password'
                     ]
                 ]
             );

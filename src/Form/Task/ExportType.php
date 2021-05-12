@@ -52,7 +52,7 @@ class ExportType extends AbstractType
                     'documentation' => [
                         'type' => 'string',
                         'example' => '2021-05-08',
-                        'format' => 'date_time'
+                        'format' => 'date'
                     ]
                 ]
             )
@@ -68,7 +68,7 @@ class ExportType extends AbstractType
                     'documentation' => [
                         'type' => 'string',
                         'example' => '2021-05-09',
-                        'format' => 'date_time'
+                        'format' => 'date'
                     ]
                 ]
             )
