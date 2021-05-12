@@ -8,6 +8,7 @@ use Symfony\Component\Intl\Exception\NotImplementedException;
 
 class TaskActionNotImplementedException extends NotImplementedException
 {
+    /** @var string  */
     protected $message = 'This action is not implemented for tasks now.';
 
     /**

@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace App\Controller\Api;
 
+use App\DTO\TasksExportDTO;
 use App\Entity\Task;
 use App\Entity\User;
+use App\Exception\UnsupportedExportFormatException;
 use App\Form\Task\CreateTaskType;
+use App\Form\Task\ExportType;
 use App\Security\Voter\TaskVoter;
+use App\Service\Export\TasksExportServiceFacade;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -242,5 +246,87 @@ class TaskController extends BaseController
                 UrlGeneratorInterface::ABSOLUTE_URL
             )
         );
+    }
+
+    /**
+     * @Route("/export", name="export", methods={"POST"})
+     * @OA\Post(
+     *     tags={"Tasks"},
+     *     summary="Export tasks",
+     *     description="Export tasks for logged in user in provided date rage and one of formats [pdf, csv, xlsx]",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref=@Model(type=ExportType::class))
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unathorized request",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *                 @OA\Schema(
+     *                     @OA\Property(property="code", type="integer", example=401),
+     *                     @OA\Property(property="message", type="string", example="Expired JWT Token"),
+     *                 )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation failed",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(property="code", type="integer", example=422),
+     *                 @OA\Property(property="message", type="string", example="Validation Failed"),
+     *                 @OA\Property(
+     *                     property="errors",
+     *                     type="object",
+     *                     @OA\Property(
+     *                         property="children",
+     *                         type="object",
+     *                         @OA\Property(
+     *                             property="type",
+     *                             type="array",
+     *                             @OA\Items(example="This value is required")
+     *                         ),
+     *                         @OA\Property(
+     *                             property="start_date",
+     *                             type="array",
+     *                             @OA\Items(example="This value is required")
+     *                         ),
+     *                         @OA\Property(
+     *                             property="end_date",
+     *                             type="array",
+     *                             @OA\Items(example="This value should be equal or greater than zero")
+     *                         ),
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
+     *
+     * @param Request $request
+     * @param TasksExportServiceFacade $tasksExportServiceFacade
+     * @return Response
+     * @throws UnsupportedExportFormatException
+     */
+    public function exportAction(Request $request, TasksExportServiceFacade $tasksExportServiceFacade): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $exportDTO = new TasksExportDTO();
+        $form = $this->createSubmittedForm(ExportType::class, $request, $exportDTO);
+
+        if (!$form->isValid()) {
+            return $this->badRequestResponse($form);
+        }
+
+        $exportDTO->setTasks($user->getTasks());
+        $responseDTO = $tasksExportServiceFacade->export($exportDTO);
+
+        return $this->exportFileDownloadResponse($responseDTO);
     }
 }

@@ -35,3 +35,22 @@ services:
 
     jms_serializer.naming_strategy:
         class: JMS\Serializer\Naming\IdenticalPropertyNamingStrategy
+
+    App\Service\Export\CsvTasksExportService:
+        class: App\Service\Export\CsvTasksExportService
+        tags:
+            - { name: app.tasks_export_service }
+
+    App\Service\Export\ExcelTasksExportService:
+        class: App\Service\Export\ExcelTasksExportService
+        tags:
+            - { name: app.tasks_export_service }
+
+    App\Service\Export\PdfTasksExportService:
+        class: App\Service\Export\PdfTasksExportService
+        tags:
+            - { name: app.tasks_export_service }
+
+    App\Service\Export\TasksExportServiceFacade:
+        class: App\Service\Export\TasksExportServiceFacade
+        arguments: [!tagged {tag: app.tasks_export_service}]

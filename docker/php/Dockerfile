@@ -10,9 +10,10 @@
 
     RUN apt-get update && \
     apt-get install -y \
-    libzip-dev
+    libzip-dev libpng-dev
 
     RUN docker-php-ext-install zip
+    RUN docker-php-ext-install gd
     RUN docker-php-ext-enable apcu
 
     WORKDIR /usr/src/app

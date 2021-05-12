@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller\Api;
 
+use App\DTO\TasksExportResponseDTO;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
-use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class BaseController extends AbstractFOSRestController
 {
@@ -42,15 +44,28 @@ class BaseController extends AbstractFOSRestController
     /**
      * @param string $formType
      * @param Request $request
-     * @param object|null $entity
+     * @param object|null $object
      * @return FormInterface
      */
-    protected function createSubmittedForm(string $formType, Request $request, ?object $entity = null): FormInterface
+    protected function createSubmittedForm(string $formType, Request $request, ?object $object = null): FormInterface
     {
-        $form = $this->createForm($formType, $entity);
+        $form = $this->createForm($formType, $object);
         $data = json_decode($request->getContent(), true);
         $form->submit($data);
 
         return $form;
+    }
+
+    /**
+     * @param TasksExportResponseDTO $responseDTO
+     * @return BinaryFileResponse
+     */
+    protected function exportFileDownloadResponse(TasksExportResponseDTO $responseDTO): BinaryFileResponse
+    {
+        return $this->file(
+            $responseDTO->getTempFile(),
+            $responseDTO->getFilename(),
+            ResponseHeaderBag::DISPOSITION_INLINE
+        );
     }
 }

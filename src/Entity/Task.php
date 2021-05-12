@@ -168,4 +168,12 @@ class Task
     {
         $this->createdDate = $createdDate;
     }
+
+    /**
+     * @return string
+     */
+    public function getFormattedDate(): string
+    {
+        return $this->createdDate->format('d/m/Y');
+    }
 }

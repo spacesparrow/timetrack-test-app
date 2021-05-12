@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tasks Export</title>
+    <style>
+        .w-100 {
+            width: 100%;
+        }
+        .w-80 {
+            width: 80%;
+        }
+        .w-20 {
+            width: 20%;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .bordered td, th {
+            border-color: black;
+            border-style: solid;
+            border-width: 1px;
+        }
+        table {
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+<body>
+<table class="w-100 bordered">
+    <thead>
+    <tr>
+        {% for heading in constant('App\\Service\\Export\\TasksExportServiceInterface::HEADERS') %}
+            <th class="w-20">{{ heading|trans }}</th>
+        {% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for task in tasks %}
+        <tr class="text-center">
+            <td class="w-20">{{ task.id }}</td>
+            <td class="w-20">{{ task.formattedDate }}</td>
+            <td class="w-20">{{ task.title }}</td>
+            <td class="w-20">{{ task.comment }}</td>
+            <td class="w-20">{{ task.timeSpent }}</td>
+        </tr>
+    {% endfor %}
+    <tr class="text-center">
+        <td colspan="4" class="w-80">{{ 'Total spent'|trans }}</td>
+        <td class="w-20">{{ totalSpent }}</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
