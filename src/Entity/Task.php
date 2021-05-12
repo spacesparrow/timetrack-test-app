@@ -9,6 +9,7 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 use OpenApi\Annotations as OA;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=TaskRepository::class)
@@ -42,6 +43,7 @@ class Task
     /**
      * @var string
      *
+     * @Assert\NotBlank()
      * @ORM\Column(type="string", length=255)
      */
     private string $title;
@@ -49,6 +51,7 @@ class Task
     /**
      * @var string
      *
+     * @Assert\NotBlank()
      * @ORM\Column(type="string", length=255)
      */
     private string $comment;
@@ -56,6 +59,8 @@ class Task
     /**
      * @var int
      *
+     * @Assert\NotBlank()
+     * @Assert\PositiveOrZero()
      * @ORM\Column(type="integer", name="time_spent")
      */
     private int $timeSpent;
@@ -63,6 +68,7 @@ class Task
     /**
      * @var DateTime|null $createdDate
      *
+     * @Assert\DateTime()
      * @ORM\Column(type="datetime", name="created_date")
      * @Serializer\Type("DateTime<'Y-m-d'>")
      * @OA\Property(example="2021-05-08")

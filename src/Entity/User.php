@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -35,6 +36,8 @@ class User implements UserInterface
     /**
      * @var string|null
      *
+     * @Assert\NotBlank()
+     * @Assert\Email()
      * @ORM\Column(type="string", length=180, unique=true)
      * @Serializer\Expose()
      */
@@ -50,6 +53,7 @@ class User implements UserInterface
     /**
      * @var string|null The hashed password
      *
+     * @Assert\NotBlank()
      * @ORM\Column(type="string")
      */
     private ?string $password;
