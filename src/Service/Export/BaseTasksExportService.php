@@ -27,13 +27,7 @@ class BaseTasksExportService
 
         foreach ($tasksExportDTO->getTasks() as $task) {
             $sheet->fromArray(
-                [
-                    $task->getId(),
-                    $task->getFormattedDate(),
-                    $task->getTitle(),
-                    $task->getComment(),
-                    $task->getTimeSpent()
-                ],
+                $task->toExportArray(),
                 null,
                 "A$cellIndex"
             );

@@ -10,11 +10,11 @@ use App\Service\AuthService;
 use App\Tests\Traits\ReflectionTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionException;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 use Symfony\Component\Security\Core\Encoder\NativePasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\VarDumper\Cloner\Stub;
 
 class AuthServiceTest extends TestCase
 {
@@ -23,11 +23,12 @@ class AuthServiceTest extends TestCase
     /** @var UserRepository|MockObject */
     private $userRepositoryMock;
 
-    /** @var UserPasswordEncoderInterface|MockObject|Stub */
+    /** @var UserPasswordEncoderInterface|MockObject */
     private $userPasswordEncoderMock;
 
     /**
      * @covers \App\Service\AuthService::__construct
+     * @throws ReflectionException
      */
     public function testConstruct(): void
     {
@@ -35,11 +36,11 @@ class AuthServiceTest extends TestCase
 
         static::assertInstanceOf(
             UserRepository::class,
-            $this->getPropertyValue($authService, 'userRepository')
+            $this->getNonPublicPropertyValue($authService, 'userRepository')
         );
         static::assertInstanceOf(
             UserPasswordEncoderInterface::class,
-            $this->getPropertyValue($authService, 'userPasswordEncoder')
+            $this->getNonPublicPropertyValue($authService, 'userPasswordEncoder')
         );
     }
 
@@ -84,7 +85,7 @@ class AuthServiceTest extends TestCase
     public function testEncodeUserPassword(): void
     {
         $user = new User();
-        $plainPassword = 'somepassword';
+        $plainPassword = 'somePassword';
         $user->setPassword($plainPassword);
 
         $this->getAuthService()->encodeUserPassword($user);

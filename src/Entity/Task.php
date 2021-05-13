@@ -182,4 +182,18 @@ class Task
     {
         return $this->createdDate->format('d/m/Y');
     }
+
+    /**
+     * @return array
+     */
+    public function toExportArray(): array
+    {
+        return [
+            $this->id,
+            $this->getFormattedDate(),
+            $this->title,
+            $this->comment,
+            $this->timeSpent
+        ];
+    }
 }
