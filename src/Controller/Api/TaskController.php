@@ -12,6 +12,7 @@ use App\Form\Task\CreateTaskType;
 use App\Form\Task\ExportType;
 use App\Security\Voter\TaskVoter;
 use App\Service\Export\TasksExportServiceFacade;
+use App\Service\TaskService;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -359,11 +360,15 @@ class TaskController extends BaseController
      *
      * @param Request $request
      * @param TasksExportServiceFacade $tasksExportServiceFacade
+     * @param TaskService $taskService
      * @return Response
      * @throws UnsupportedExportFormatException
      */
-    public function exportAction(Request $request, TasksExportServiceFacade $tasksExportServiceFacade): Response
-    {
+    public function exportAction(
+        Request $request,
+        TasksExportServiceFacade $tasksExportServiceFacade,
+        TaskService $taskService
+    ): Response {
         /** @var User $user */
         $user = $this->getUser();
         $exportDTO = new TasksExportDTO();
@@ -373,7 +378,10 @@ class TaskController extends BaseController
             return $this->badRequestResponse($form);
         }
 
-        $exportDTO->setTasks($user->getTasks());
+        $startDate = $form->get('start_date')->getData();
+        $endDate = $form->get('end_date')->getData();
+        $filteredTasks = $taskService->filterTasksByDateRange($user->getTasks(), $startDate, $endDate);
+        $exportDTO->setTasks($filteredTasks);
         $responseDTO = $tasksExportServiceFacade->export($exportDTO);
 
         return $this->exportFileDownloadResponse($responseDTO);

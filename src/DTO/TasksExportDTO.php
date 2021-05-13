@@ -52,17 +52,7 @@ class TasksExportDTO
      */
     public function setTasks($tasks): void
     {
-        $startDate = $this->startDate;
-        $endDate = $this->endDate;
-
-        if (!$startDate || !$endDate) {
-            $this->tasks = $tasks;
-            return;
-        }
-
-        $this->tasks = $tasks->filter(function (Task $task) use ($startDate, $endDate) {
-            return $task->getCreatedDate() >= $startDate && $task->getCreatedDate() <= $endDate;
-        });
+        $this->tasks = $tasks;
     }
 
     /**
