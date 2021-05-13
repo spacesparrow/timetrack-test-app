@@ -52,7 +52,7 @@ class ExcelTasksExportServiceTest extends GeneralTasksExportServiceTest
      */
     public function testExport(): void
     {
-        $exportDTO = $this->getTestingData();
+        $exportDTO = $this->getTestingData(self::TYPE_XLSX);
 
         $this->performExpectations();
 

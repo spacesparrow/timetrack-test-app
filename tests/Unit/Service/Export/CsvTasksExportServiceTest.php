@@ -50,7 +50,7 @@ class CsvTasksExportServiceTest extends GeneralTasksExportServiceTest
      */
     public function testExport(): void
     {
-        $exportDTO = $this->getTestingData();
+        $exportDTO = $this->getTestingData(self::TYPE_CSV);
 
         $this->performExpectations();
 

@@ -29,10 +29,11 @@ abstract class GeneralTasksExportServiceTest extends TestCase
     protected $translatorMock;
 
     /**
+     * @param string $extension
      * @return TasksExportDTO
      * @throws ReflectionException
      */
-    protected function getTestingData(): TasksExportDTO
+    protected function getTestingData(string $extension): TasksExportDTO
     {
         $previousTask = new Task();
         $this->setNonPublicPropertyValue($previousTask, 'id', 5);
@@ -49,7 +50,7 @@ abstract class GeneralTasksExportServiceTest extends TestCase
         $currentTask->setCreatedDate(new DateTime());
 
         $exportDTO = new TasksExportDTO();
-        $exportDTO->setType(self::TYPE_CSV);
+        $exportDTO->setType($extension);
         $exportDTO->setStartDate(new DateTime('2 days ago'));
         $exportDTO->setEndDate(new DateTime());
         $exportDTO->setTasks(new ArrayCollection([$previousTask, $currentTask]));
