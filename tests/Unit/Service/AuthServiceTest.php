@@ -62,10 +62,7 @@ class AuthServiceTest extends TestCase
             )
             ->willReturn($expected);
 
-        static::assertSame(
-            $expected,
-            $this->getAuthService()->checkEmailUsed($email)
-        );
+        static::assertSame($expected, $this->getAuthService()->checkEmailUsed($email));
     }
 
     /**
@@ -90,10 +87,7 @@ class AuthServiceTest extends TestCase
 
         $this->getAuthService()->encodeUserPassword($user);
 
-        static::assertNotEquals(
-            $plainPassword,
-            $user->getPassword()
-        );
+        static::assertNotEquals($plainPassword, $user->getPassword());
     }
 
     /**
@@ -101,10 +95,7 @@ class AuthServiceTest extends TestCase
      */
     private function getAuthService(): AuthService
     {
-        return new AuthService(
-            $this->userRepositoryMock,
-            $this->userPasswordEncoderMock
-        );
+        return new AuthService($this->userRepositoryMock, $this->userPasswordEncoderMock);
     }
 
     /**
