@@ -4,8 +4,9 @@
  - Navigate to project directory that was created at the previous step `cd {project directory}`
  - Build containers `docker-compose build`
  - Up containers `docker-compose up -d`
- - Install packages from composer `docker-compose exec php compose install`
- - Migrate database schema `docker-compose exec php php bin/console doctrineLmigrations:migrate`
+ - Add local .env file `docker-compose exec php cp .env .env.local ` 
+ - Install packages from composer `docker-compose exec php composer install`
+ - Migrate database schema `docker-compose exec php php bin/console doctrine:migrations:migrate`
  - Generate keypair for JWT token authentication `docker-compose exec php php bin/console lexik:jwt:generate-keypair`
  - Project set up finished, host is `http://localhost`
 

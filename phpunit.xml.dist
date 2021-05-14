@@ -18,4 +18,11 @@
             <directory>tests/Unit</directory>
         </testsuite>
     </testsuites>
+
+    <coverage>
+        <include>
+            <directory suffix=".php">src/Service</directory>
+            <directory suffix=".php">src/Form</directory>
+        </include>
+    </coverage>
 </phpunit>
