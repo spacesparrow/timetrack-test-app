@@ -4,16 +4,27 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\Task;
+use App\Entity\User;
+use App\Repository\TaskRepository;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
 
 class TaskService
 {
-    public function filterTasksByDateRange(Collection $tasks, DateTime $startDate, DateTime $endDate): Collection
+    private TaskRepository $taskRepository;
+
+    public function __construct(TaskRepository $taskRepository)
     {
-        return $tasks->filter(function (Task $task) use ($startDate, $endDate) {
-            return $task->getCreatedDate() >= $startDate && $task->getCreatedDate() <= $endDate;
-        });
+        $this->taskRepository = $taskRepository;
+    }
+
+    public function getUserTasks(User $user): Collection
+    {
+        return $this->taskRepository->findByUser($user);
+    }
+
+    public function getUserTasksByDateRange(User $user, DateTime $startDate, DateTime $endDate): Collection
+    {
+        return $this->taskRepository->findUserTasksFilteredByDateRange($user, $startDate, $endDate);
     }
 }

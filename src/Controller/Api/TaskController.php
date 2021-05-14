@@ -28,6 +28,13 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class TaskController extends BaseController
 {
+    private TaskService $taskService;
+
+    public function __construct(TaskService $taskService)
+    {
+        $this->taskService = $taskService;
+    }
+
     /**
      * @Route("/", name="list", methods={"GET"})
      * @OA\Get(
@@ -70,7 +77,7 @@ class TaskController extends BaseController
     {
         /** @var User $user */
         $user = $this->getUser();
-        $tasks = $user->getTasks();
+        $tasks = $this->taskService->getUserTasks($user);
 
         $paginatedTasks = $paginator->paginate(
             $tasks,
@@ -350,8 +357,7 @@ class TaskController extends BaseController
      */
     public function exportAction(
         Request $request,
-        TasksExportServiceFacade $tasksExportServiceFacade,
-        TaskService $taskService
+        TasksExportServiceFacade $tasksExportServiceFacade
     ): Response {
         /** @var User $user */
         $user = $this->getUser();
@@ -364,7 +370,7 @@ class TaskController extends BaseController
 
         $startDate = $form->get('start_date')->getData();
         $endDate = $form->get('end_date')->getData();
-        $filteredTasks = $taskService->filterTasksByDateRange($user->getTasks(), $startDate, $endDate);
+        $filteredTasks = $this->taskService->getUserTasksByDateRange($user, $startDate, $endDate);
         $exportDTO->setTasks($filteredTasks);
         $responseDTO = $tasksExportServiceFacade->export($exportDTO);
 
