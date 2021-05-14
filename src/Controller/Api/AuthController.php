@@ -83,10 +83,8 @@ class AuthController extends BaseController
      * )
      * @Security()
      */
-    public function registerAction(
-        Request $request,
-        EntityManagerInterface $manager
-    ): Response {
+    public function registerAction(Request $request, EntityManagerInterface $manager): Response
+    {
         $user = new User();
         $form = $this->createSubmittedForm(RegisterType::class, $request, $user);
 
