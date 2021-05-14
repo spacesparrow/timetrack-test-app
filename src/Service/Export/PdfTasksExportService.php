@@ -7,6 +7,8 @@ namespace App\Service\Export;
 use App\DTO\TasksExportDTO;
 use App\DTO\TasksExportResponseDTO;
 use App\Exception\UnsupportedExportFormatException;
+use App\Traits\TasksExportTrait;
+use App\Traits\TranslatorInterfaceAwareTrait;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Twig\Environment;
@@ -14,8 +16,20 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-class PdfTasksExportService extends BaseTasksExportService implements TasksExportServiceInterface
+class PdfTasksExportService implements TasksExportServiceInterface
 {
+    use TasksExportTrait;
+    use TranslatorInterfaceAwareTrait;
+
+    /** @var string[] */
+    private const HEADERS = [
+        'ID',
+        'Date',
+        'Title',
+        'Comment',
+        'Time spent',
+    ];
+
     private Environment $templateEngine;
 
     public function __construct(Environment $templateEngine)
@@ -49,7 +63,7 @@ class PdfTasksExportService extends BaseTasksExportService implements TasksExpor
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    private function createFilledTemplate(TasksExportDTO $tasksExportDTO): ?string
+    public function createFilledTemplate(TasksExportDTO $tasksExportDTO): ?string
     {
         $options = new Options();
         $options->set('defaultFont', 'Arial');
@@ -58,6 +72,7 @@ class PdfTasksExportService extends BaseTasksExportService implements TasksExpor
         $content = $this->templateEngine->render(
             'export/tasks_export.html.twig',
             [
+                'headings' => self::HEADERS,
                 'tasks' => $tasksExportDTO->getTasks(),
                 'totalSpent' => $tasksExportDTO->getTotalTimeSpent(),
             ]

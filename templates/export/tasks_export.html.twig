@@ -30,7 +30,7 @@
 <table class="w-100 bordered">
     <thead>
     <tr>
-        {% for heading in constant('App\\Service\\Export\\TasksExportServiceInterface::HEADERS') %}
+        {% for heading in headings %}
             <th class="w-20">{{ heading|trans }}</th>
         {% endfor %}
     </tr>

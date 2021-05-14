@@ -23,16 +23,9 @@ interface TasksExportServiceInterface
         self::TYPE_XLSX,
     ];
 
-    /** @var string[] */
-    public const HEADERS = [
-        'ID',
-        'Date',
-        'Title',
-        'Comment',
-        'Time spent',
-    ];
-
     public function supports(TasksExportDTO $tasksExportDTO): bool;
 
     public function export(TasksExportDTO $tasksExportDTO): TasksExportResponseDTO;
+
+    public function createFilledTemplate(TasksExportDTO $tasksExportDTO);
 }
