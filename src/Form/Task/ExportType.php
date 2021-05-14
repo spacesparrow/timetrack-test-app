@@ -83,6 +83,10 @@ class ExportType extends AbstractType
 
     public function validate(TasksExportDTO $exportDTO, ExecutionContextInterface $context): void
     {
+        /*
+         * Check if startDate is less than endDate
+         * Add failed validation for start_date field if its true
+         */
         if ($exportDTO->getStartDate() > $exportDTO->getEndDate()) {
             $context->buildViolation("Start date can't be after end date")
                 ->atPath('start_date')

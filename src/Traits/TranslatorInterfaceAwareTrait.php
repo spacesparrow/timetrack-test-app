@@ -10,9 +10,7 @@ trait TranslatorInterfaceAwareTrait
 {
     private TranslatorInterface $translator;
 
-    /**
-     * @required
-     */
+    /** @required */
     public function setTranslator(TranslatorInterface $translator): void
     {
         $this->translator = $translator;

@@ -8,6 +8,9 @@ use ReflectionException;
 use ReflectionMethod;
 use ReflectionProperty;
 
+/*
+ * Here stored methods for accessing non public class properties and methods
+ */
 trait ReflectionTrait
 {
     /**

@@ -85,19 +85,24 @@ class AuthController extends BaseController
      */
     public function registerAction(Request $request, EntityManagerInterface $manager): Response
     {
+        /* create empty user and fill it with request data */
         $user = new User();
         $form = $this->createSubmittedForm(RegisterType::class, $request, $user);
 
+        /* return response with messages if validation failed */
         if (!$form->isValid()) {
             return $this->badRequestResponse($form);
         }
 
         /** @var User $user */
         $user = $form->getData();
+        /* encode provided password */
         $this->authService->encodeUserPassword($user);
+        /* save created user in database */
         $manager->persist($user);
         $manager->flush();
 
+        /* redirect created user to login endpoint */
         return $this->redirectToRoute(
             'api_auth_login',
             [

@@ -6,6 +6,9 @@ namespace App\Exception;
 
 use Symfony\Component\Intl\Exception\NotImplementedException;
 
+/*
+ * Should be thrown if not implemented action was reached in Voter
+ */
 class TaskActionNotImplementedException extends NotImplementedException
 {
     /** @var string */

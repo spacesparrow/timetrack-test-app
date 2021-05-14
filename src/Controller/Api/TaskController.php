@@ -75,10 +75,12 @@ class TaskController extends BaseController
      */
     public function indexAction(Request $request, PaginatorInterface $paginator): Response
     {
+        /* get logged in user and it tasks */
         /** @var User $user */
         $user = $this->getUser();
         $tasks = $this->taskService->getUserTasks($user);
 
+        /* paginate user tasks  */
         $paginatedTasks = $paginator->paginate(
             $tasks,
             $request->request->getInt('page', 1)
@@ -139,10 +141,15 @@ class TaskController extends BaseController
      */
     public function showAction(?Task $task = null): Response
     {
+        /*
+         * throw NotFoundException (which will be converted to 404 Not Found response)
+         * if no task with provided id was found
+         */
         if (!$task) {
             throw $this->createNotFoundException();
         }
 
+        /* deny access to found task if logged in user is not creator of it */
         $this->denyAccessUnlessGranted(TaskVoter::ACTION_VIEW, $task);
 
         return $this->showResponse($task);
@@ -229,20 +236,25 @@ class TaskController extends BaseController
     public function createAction(Request $request, EntityManagerInterface $manager): Response
     {
         $task = new Task();
+        /* deny access to task creation if logged in user can not perform this action */
         $this->denyAccessUnlessGranted(TaskVoter::ACTION_CREATE, $task);
 
         /** @var User $user */
         $user = $this->getUser();
+        /* fill empty task with request data */
         $form = $this->createSubmittedForm(CreateTaskType::class, $request, $task);
 
+        /* return response with messages if validation failed */
         if (!$form->isValid()) {
             return $this->badRequestResponse($form);
         }
 
+        /* attach user to the task and save it in database */
         $task->setUser($user);
         $manager->persist($task);
         $manager->flush();
 
+        /* return response with absolute url to created task in Location header */
         return $this->createdResponse(
             $this->generateUrl(
                 'api_tasks_show',
@@ -355,25 +367,28 @@ class TaskController extends BaseController
      *
      * @throws UnsupportedExportFormatException
      */
-    public function exportAction(
-        Request $request,
-        TasksExportServiceFacade $tasksExportServiceFacade
-    ): Response {
+    public function exportAction(Request $request, TasksExportServiceFacade $tasksExportServiceFacade): Response
+    {
         /** @var User $user */
         $user = $this->getUser();
+        /* created data transfer object for export and fill it with request data */
         $exportDTO = new TasksExportDTO();
         $form = $this->createSubmittedForm(ExportType::class, $request, $exportDTO);
 
+        /* return response with messages if validation failed */
         if (!$form->isValid()) {
             return $this->badRequestResponse($form);
         }
 
         $startDate = $form->get('start_date')->getData();
         $endDate = $form->get('end_date')->getData();
+        /* get user tasks that have createdDate in provided date range */
         $filteredTasks = $this->taskService->getUserTasksByDateRange($user, $startDate, $endDate);
+        /* put filtered by date tasks in DTO and process export */
         $exportDTO->setTasks($filteredTasks);
         $responseDTO = $tasksExportServiceFacade->export($exportDTO);
 
+        /* return download file response with generated one */
         return $this->exportFileDownloadResponse($responseDTO);
     }
 }

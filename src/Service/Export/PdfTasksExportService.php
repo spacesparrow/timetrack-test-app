@@ -37,6 +37,9 @@ class PdfTasksExportService implements TasksExportServiceInterface
         $this->templateEngine = $templateEngine;
     }
 
+    /*
+     * Supports export if PDF type requested
+     */
     public function supports(TasksExportDTO $tasksExportDTO): bool
     {
         return $tasksExportDTO->isPdfExport();
@@ -50,9 +53,12 @@ class PdfTasksExportService implements TasksExportServiceInterface
      */
     public function export(TasksExportDTO $tasksExportDTO): TasksExportResponseDTO
     {
+        /* prepare export file content */
         $content = $this->createFilledTemplate($tasksExportDTO);
+        /* create temporary file with .xlsx extension */
         $filename = $this->createFilename(self::TYPE_PDF);
         $tempFile = $this->createTempFile($filename);
+        /* write content to file */
         file_put_contents($tempFile, $content);
 
         return $this->generateResponseDTO($filename, $tempFile);
@@ -65,10 +71,13 @@ class PdfTasksExportService implements TasksExportServiceInterface
      */
     public function createFilledTemplate(TasksExportDTO $tasksExportDTO): ?string
     {
+        /* create Options for PDF filler */
         $options = new Options();
         $options->set('defaultFont', 'Arial');
 
+        /* create PDF filler object */
         $domPdf = new Dompdf($options);
+        /* fill view with export data */
         $content = $this->templateEngine->render(
             'export/tasks_export.html.twig',
             [
@@ -77,6 +86,7 @@ class PdfTasksExportService implements TasksExportServiceInterface
                 'totalSpent' => $tasksExportDTO->getTotalTimeSpent(),
             ]
         );
+        /* load content to PDF file, set paper size and draw it */
         $domPdf->loadHtml($content);
         $domPdf->setPaper('A4');
         $domPdf->render();

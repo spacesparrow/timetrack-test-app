@@ -7,6 +7,9 @@ namespace App\Exception;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
 
+/*
+ * Should be thrown if unsupported export type was requested or if type support was not implemented yet
+ */
 class UnsupportedExportFormatException extends Exception
 {
     /** @var string */

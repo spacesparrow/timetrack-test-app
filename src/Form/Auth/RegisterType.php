@@ -75,6 +75,10 @@ class RegisterType extends AbstractType
 
     public function validate(User $user, ExecutionContextInterface $context): void
     {
+        /*
+         * Check if email is already used
+         * Add failed validation for email field if its true
+         */
         if ($this->authService->checkEmailUsed($user->getEmail())) {
             $context->buildViolation('This email is used by another user')
                 ->atPath('email')

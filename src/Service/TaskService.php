@@ -20,11 +20,17 @@ class TaskService
 
     public function getUserTasks(User $user): Collection
     {
+        /*
+         * Select user tasks from database
+         */
         return $this->taskRepository->findByUser($user);
     }
 
     public function getUserTasksByDateRange(User $user, DateTime $startDate, DateTime $endDate): Collection
     {
+        /*
+         * Select user tasks, filtered by date range, from database
+         */
         return $this->taskRepository->findUserTasksFilteredByDateRange($user, $startDate, $endDate);
     }
 }

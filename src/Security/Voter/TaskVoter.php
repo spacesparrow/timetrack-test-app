@@ -22,6 +22,9 @@ class TaskVoter extends Voter
      */
     protected function supports($attribute, $subject): bool
     {
+        /*
+         * Check if this voter supports provided subject and actions (attribute param)
+         */
         return in_array($attribute, self::SUPPORTED_ACTIONS) && $subject instanceof Task;
     }
 
@@ -33,6 +36,9 @@ class TaskVoter extends Voter
     {
         $user = $token->getUser();
 
+        /*
+         * Deny access if there is no logged in user
+         */
         if (!$user instanceof UserInterface) {
             return false;
         }
@@ -40,6 +46,10 @@ class TaskVoter extends Voter
         /** @var Task $task */
         $task = $subject;
 
+        /*
+         * Find matched action and check access for it
+         * Throw exception if action (attribute param) has no check method
+         */
         switch ($attribute) {
             case self::ACTION_CREATE:
                 return $this->canCreate($task, $user);

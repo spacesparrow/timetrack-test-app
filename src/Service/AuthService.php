@@ -25,11 +25,17 @@ class AuthService
 
     public function checkEmailUsed(string $email): bool
     {
+        /*
+         * Select user with provided email from DB
+         */
         return (bool) $this->userRepository->findOneByEmail($email);
     }
 
     public function encodeUserPassword(User $user): void
     {
+        /*
+         * Encode plain user password
+         */
         $user->setPassword($this->userPasswordEncoder->encodePassword($user, $user->getPassword()));
     }
 }

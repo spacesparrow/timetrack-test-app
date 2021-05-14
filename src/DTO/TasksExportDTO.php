@@ -9,15 +9,30 @@ use App\Service\Export\TasksExportServiceInterface;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
 
+/*
+ * Store form data for tasks export action
+ */
 class TasksExportDTO
 {
+    /*
+     * Export filetype (extension)
+     */
     private string $type;
 
+    /*
+     * User tasks to export
+     */
     /** @var iterable|Task[]|Collection */
     private iterable $tasks;
 
+    /*
+     * Start date filter
+     */
     private DateTime $startDate;
 
+    /*
+     * End date filter
+     */
     private DateTime $endDate;
 
     public function getType(): string
@@ -66,21 +81,33 @@ class TasksExportDTO
         $this->endDate = $endDate;
     }
 
+    /*
+     * Check if .pdf file should be result of export
+     */
     public function isPdfExport(): bool
     {
         return TasksExportServiceInterface::TYPE_PDF === $this->type;
     }
 
+    /*
+     * Check if .csv file should be result of export
+     */
     public function isCsvExport(): bool
     {
         return TasksExportServiceInterface::TYPE_CSV === $this->type;
     }
 
+    /*
+     * Check if .xlsx file should be result of export
+     */
     public function isExcelExport(): bool
     {
         return TasksExportServiceInterface::TYPE_XLSX === $this->type;
     }
 
+    /*
+     * Calculate total time spent
+     */
     public function getTotalTimeSpent(): int
     {
         $total = 0;

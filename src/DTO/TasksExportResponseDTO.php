@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\DTO;
 
+/*
+ * Store filename and path to temporary file where content stored
+ */
 class TasksExportResponseDTO
 {
     private string $filename;

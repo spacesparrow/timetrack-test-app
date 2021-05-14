@@ -26,12 +26,20 @@ class TasksExportServiceFacade
      */
     public function export(TasksExportDTO $tasksExportDTO): TasksExportResponseDTO
     {
+        /*
+         * Loop over tasks export services
+         * Check if service supports requested export type (stored in TasksExportDTO)
+         * Process export
+         */
         foreach ($this->exportServices as $exportService) {
             if ($exportService->supports($tasksExportDTO)) {
                 return $exportService->export($tasksExportDTO);
             }
         }
 
+        /*
+         * Throw exception if there is no support of requested export type
+         */
         throw new UnsupportedExportFormatException($tasksExportDTO->getType());
     }
 }
