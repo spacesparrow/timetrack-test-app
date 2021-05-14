@@ -20,12 +20,10 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class AuthController extends BaseController
 {
-    /** @var AuthService */
     private AuthService $authService;
 
     /**
      * AuthController constructor.
-     * @param AuthService $authService
      */
     public function __construct(AuthService $authService)
     {
@@ -84,10 +82,6 @@ class AuthController extends BaseController
      *     )
      * )
      * @Security()
-     *
-     * @param Request $request
-     * @param EntityManagerInterface $manager
-     * @return Response
      */
     public function registerAction(
         Request $request,
@@ -110,7 +104,7 @@ class AuthController extends BaseController
             'api_auth_login',
             [
                 'email' => $form->get('email')->getData(),
-                'password' => $form->get('password')->getData()
+                'password' => $form->get('password')->getData(),
             ],
             Response::HTTP_TEMPORARY_REDIRECT
         );

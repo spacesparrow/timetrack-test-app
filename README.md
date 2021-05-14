@@ -13,6 +13,8 @@
 
  - API docs can be found at this URL `http://localhost/api/doc`
 
-# **Run tests**
+# **Tests and code style**
 
- - For unit test suite execute this command `docker-compose exec php composer run test-unit`
+ - For running unit test suite execute `docker-compose exec php composer test-unit`
+ - For checking code style execute `docker-compose exec php composer check-cs`
+ - For fixing code style execute `docker-compose exec php composer fix-cs`

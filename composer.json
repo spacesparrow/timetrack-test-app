@@ -11,6 +11,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.1",
         "doctrine/orm": "^2.8",
         "dompdf/dompdf": "^1.0",
+        "friendsofphp/php-cs-fixer": "^3.0",
         "friendsofsymfony/rest-bundle": "^3.0",
         "fzaninotto/faker": "^1.9",
         "gedmo/doctrine-extensions": "^3.0",
@@ -68,7 +69,9 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
-        "test-unit": "vendor/bin/phpunit --testsuite unit"
+        "test-unit": "vendor/bin/phpunit --testsuite unit",
+        "check-cs": "vendor/bin/php-cs-fixer fix src --dry-run -v",
+        "fix-cs": "vendor/bin/php-cs-fixer fix src"
     },
     "conflict": {
         "symfony/symfony": "*"

@@ -14,10 +14,6 @@ class BaseTasksExportService
 {
     use TranslatorInterfaceAwareTrait;
 
-    /**
-     * @param TasksExportDTO $tasksExportDTO
-     * @return Spreadsheet
-     */
     protected function createFilledSpreadsheet(TasksExportDTO $tasksExportDTO): Spreadsheet
     {
         $spreadsheet = new Spreadsheet();
@@ -31,7 +27,7 @@ class BaseTasksExportService
                 null,
                 "A$cellIndex"
             );
-            $cellIndex++;
+            ++$cellIndex;
         }
 
         $sheet->fromArray(
@@ -40,7 +36,7 @@ class BaseTasksExportService
                 null,
                 null,
                 null,
-                $tasksExportDTO->getTotalTimeSpent()
+                $tasksExportDTO->getTotalTimeSpent(),
             ],
             null,
             "A$cellIndex"
@@ -49,18 +45,12 @@ class BaseTasksExportService
         return $spreadsheet;
     }
 
-    /**
-     * @param string $filename
-     * @return string
-     */
     protected function createTempFile(string $filename): string
     {
         return tempnam(sys_get_temp_dir(), $filename);
     }
 
     /**
-     * @param string $extension
-     * @return string
      * @throws UnsupportedExportFormatException
      */
     protected function createFilename(string $extension): string
@@ -72,11 +62,6 @@ class BaseTasksExportService
         return "tasks_export.$extension";
     }
 
-    /**
-     * @param string $filename
-     * @param string $tempFile
-     * @return TasksExportResponseDTO
-     */
     protected function generateResponseDTO(string $filename, string $tempFile): TasksExportResponseDTO
     {
         return new TasksExportResponseDTO($filename, $tempFile);

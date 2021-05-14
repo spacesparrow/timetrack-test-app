@@ -11,29 +11,20 @@ use Doctrine\Common\Collections\Collection;
 
 class TasksExportDTO
 {
-    /** @var string */
     private string $type;
 
     /** @var iterable|Task[]|Collection */
     private iterable $tasks;
 
-    /** @var DateTime */
     private DateTime $startDate;
 
-    /** @var DateTime */
     private DateTime $endDate;
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @param string $type
-     */
     public function setType(string $type): void
     {
         $this->type = $type;
@@ -55,65 +46,41 @@ class TasksExportDTO
         $this->tasks = $tasks;
     }
 
-    /**
-     * @return DateTime
-     */
     public function getStartDate(): DateTime
     {
         return $this->startDate;
     }
 
-    /**
-     * @param DateTime $startDate
-     */
     public function setStartDate(DateTime $startDate): void
     {
         $this->startDate = $startDate;
     }
 
-    /**
-     * @return DateTime
-     */
     public function getEndDate(): DateTime
     {
         return $this->endDate;
     }
 
-    /**
-     * @param DateTime $endDate
-     */
     public function setEndDate(DateTime $endDate): void
     {
         $this->endDate = $endDate;
     }
 
-    /**
-     * @return bool
-     */
     public function isPdfExport(): bool
     {
-        return $this->type === TasksExportServiceInterface::TYPE_PDF;
+        return TasksExportServiceInterface::TYPE_PDF === $this->type;
     }
 
-    /**
-     * @return bool
-     */
     public function isCsvExport(): bool
     {
-        return $this->type === TasksExportServiceInterface::TYPE_CSV;
+        return TasksExportServiceInterface::TYPE_CSV === $this->type;
     }
 
-    /**
-     * @return bool
-     */
     public function isExcelExport(): bool
     {
-        return $this->type === TasksExportServiceInterface::TYPE_XLSX;
+        return TasksExportServiceInterface::TYPE_XLSX === $this->type;
     }
 
-    /**
-     * @return int
-     */
     public function getTotalTimeSpent(): int
     {
         $total = 0;

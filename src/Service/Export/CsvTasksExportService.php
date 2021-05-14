@@ -11,18 +11,12 @@ use PhpOffice\PhpSpreadsheet\Writer\Csv as CsvWriter;
 
 class CsvTasksExportService extends BaseTasksExportService implements TasksExportServiceInterface
 {
-    /**
-     * @param TasksExportDTO $tasksExportDTO
-     * @return bool
-     */
     public function supports(TasksExportDTO $tasksExportDTO): bool
     {
         return $tasksExportDTO->isCsvExport();
     }
 
     /**
-     * @param TasksExportDTO $tasksExportDTO
-     * @return TasksExportResponseDTO
      * @throws UnsupportedExportFormatException
      */
     public function export(TasksExportDTO $tasksExportDTO): TasksExportResponseDTO

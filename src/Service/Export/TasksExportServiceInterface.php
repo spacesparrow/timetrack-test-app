@@ -9,38 +9,30 @@ use App\DTO\TasksExportResponseDTO;
 
 interface TasksExportServiceInterface
 {
-    /** @var string  */
+    /** @var string */
     public const TYPE_PDF = 'pdf';
-    /** @var string  */
+    /** @var string */
     public const TYPE_CSV = 'csv';
-    /** @var string  */
+    /** @var string */
     public const TYPE_XLSX = 'xlsx';
 
-    /** @var string[]  */
+    /** @var string[] */
     public const ALLOWED_TYPES = [
         self::TYPE_PDF,
         self::TYPE_CSV,
-        self::TYPE_XLSX
+        self::TYPE_XLSX,
     ];
 
-    /** @var string[]  */
+    /** @var string[] */
     public const HEADERS = [
         'ID',
         'Date',
         'Title',
         'Comment',
-        'Time spent'
+        'Time spent',
     ];
 
-    /**
-     * @param TasksExportDTO $tasksExportDTO
-     * @return bool
-     */
     public function supports(TasksExportDTO $tasksExportDTO): bool;
 
-    /**
-     * @param TasksExportDTO $tasksExportDTO
-     * @return TasksExportResponseDTO
-     */
     public function export(TasksExportDTO $tasksExportDTO): TasksExportResponseDTO;
 }

@@ -12,18 +12,12 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx as XlsxWriter;
 
 class ExcelTasksExportService extends BaseTasksExportService implements TasksExportServiceInterface
 {
-    /**
-     * @param TasksExportDTO $tasksExportDTO
-     * @return bool
-     */
     public function supports(TasksExportDTO $tasksExportDTO): bool
     {
         return $tasksExportDTO->isExcelExport();
     }
 
     /**
-     * @param TasksExportDTO $tasksExportDTO
-     * @return TasksExportResponseDTO
      * @throws UnsupportedExportFormatException
      * @throws Exception
      */

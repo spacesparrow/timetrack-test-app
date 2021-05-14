@@ -25,8 +25,6 @@ class User implements UserInterface
     public const MAX_PASSWORD_LENGTH = 50;
 
     /**
-     * @var int
-     *
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -34,8 +32,6 @@ class User implements UserInterface
     private int $id;
 
     /**
-     * @var string|null
-     *
      * @Assert\NotBlank()
      * @Assert\Email()
      * @ORM\Column(type="string", length=180, unique=true)
@@ -44,8 +40,6 @@ class User implements UserInterface
     private ?string $email;
 
     /**
-     * @var array
-     *
      * @ORM\Column(type="json")
      */
     private array $roles = [];
@@ -74,24 +68,17 @@ class User implements UserInterface
         $this->tasks = new ArrayCollection();
     }
 
-    /**
-     * @return int|null
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return string|null
-     */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
     /**
-     * @param string $email
      * @return $this
      */
     public function setEmail(string $email): self
@@ -105,7 +92,6 @@ class User implements UserInterface
      * A visual identifier that represents this user.
      *
      * @see UserInterface
-     * @return string
      */
     public function getUsername(): string
     {
@@ -114,7 +100,6 @@ class User implements UserInterface
 
     /**
      * @see UserInterface
-     * @return array
      */
     public function getRoles(): array
     {
@@ -126,7 +111,6 @@ class User implements UserInterface
     }
 
     /**
-     * @param array $roles
      * @return User
      */
     public function setRoles(array $roles): self
@@ -138,7 +122,6 @@ class User implements UserInterface
 
     /**
      * @see UserInterface
-     * @return string
      */
     public function getPassword(): string
     {
@@ -146,7 +129,6 @@ class User implements UserInterface
     }
 
     /**
-     * @param string $password
      * @return $this
      */
     public function setPassword(string $password): self
@@ -161,7 +143,6 @@ class User implements UserInterface
      * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
      *
      * @see UserInterface
-     * @return string|null
      */
     public function getSalt(): ?string
     {
@@ -186,7 +167,6 @@ class User implements UserInterface
     }
 
     /**
-     * @param Task $task
      * @return $this
      */
     public function addTask(Task $task): self
@@ -200,7 +180,6 @@ class User implements UserInterface
     }
 
     /**
-     * @param Task $task
      * @return $this
      */
     public function removeTask(Task $task): self

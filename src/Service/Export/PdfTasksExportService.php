@@ -16,7 +16,6 @@ use Twig\Error\SyntaxError;
 
 class PdfTasksExportService extends BaseTasksExportService implements TasksExportServiceInterface
 {
-    /** @var Environment */
     private Environment $templateEngine;
 
     public function __construct(Environment $templateEngine)
@@ -24,18 +23,12 @@ class PdfTasksExportService extends BaseTasksExportService implements TasksExpor
         $this->templateEngine = $templateEngine;
     }
 
-    /**
-     * @param TasksExportDTO $tasksExportDTO
-     * @return bool
-     */
     public function supports(TasksExportDTO $tasksExportDTO): bool
     {
         return $tasksExportDTO->isPdfExport();
     }
 
     /**
-     * @param TasksExportDTO $tasksExportDTO
-     * @return TasksExportResponseDTO
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
@@ -52,8 +45,6 @@ class PdfTasksExportService extends BaseTasksExportService implements TasksExpor
     }
 
     /**
-     * @param TasksExportDTO $tasksExportDTO
-     * @return string|null
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
@@ -68,7 +59,7 @@ class PdfTasksExportService extends BaseTasksExportService implements TasksExpor
             'export/tasks_export.html.twig',
             [
                 'tasks' => $tasksExportDTO->getTasks(),
-                'totalSpent' => $tasksExportDTO->getTotalTimeSpent()
+                'totalSpent' => $tasksExportDTO->getTotalTimeSpent(),
             ]
         );
         $domPdf->loadHtml($content);

@@ -17,10 +17,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use OpenApi\Annotations as OA;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
@@ -28,7 +28,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class TaskController extends BaseController
 {
-
     /**
      * @Route("/", name="list", methods={"GET"})
      * @OA\Get(
@@ -66,10 +65,6 @@ class TaskController extends BaseController
      *     ),
      * )
      * @Security(name="Bearer")
-     *
-     * @param Request $request
-     * @param PaginatorInterface $paginator
-     * @return Response
      */
     public function indexAction(Request $request, PaginatorInterface $paginator): Response
     {
@@ -134,9 +129,6 @@ class TaskController extends BaseController
      *     )
      * )
      * @Security(name="Bearer")
-     *
-     * @param Task|null $task
-     * @return Response
      */
     public function showAction(?Task $task = null): Response
     {
@@ -226,10 +218,6 @@ class TaskController extends BaseController
      *     )
      * )
      * @Security(name="Bearer")
-     *
-     * @param Request $request
-     * @param EntityManagerInterface $manager
-     * @return Response
      */
     public function createAction(Request $request, EntityManagerInterface $manager): Response
     {
@@ -358,10 +346,6 @@ class TaskController extends BaseController
      *     )
      * )
      *
-     * @param Request $request
-     * @param TasksExportServiceFacade $tasksExportServiceFacade
-     * @param TaskService $taskService
-     * @return Response
      * @throws UnsupportedExportFormatException
      */
     public function exportAction(

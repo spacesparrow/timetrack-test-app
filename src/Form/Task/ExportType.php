@@ -16,10 +16,6 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class ExportType extends AbstractType
 {
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $allowedTypes = TasksExportServiceInterface::ALLOWED_TYPES;
@@ -36,8 +32,8 @@ class ExportType extends AbstractType
                     'documentation' => [
                         'type' => 'string',
                         'example' => TasksExportServiceInterface::TYPE_PDF,
-                        'enum' => $allowedTypes
-                    ]
+                        'enum' => $allowedTypes,
+                    ],
                 ]
             )
             ->add(
@@ -52,8 +48,8 @@ class ExportType extends AbstractType
                     'documentation' => [
                         'type' => 'string',
                         'example' => '2021-05-08',
-                        'format' => 'date'
-                    ]
+                        'format' => 'date',
+                    ],
                 ]
             )
             ->add(
@@ -68,30 +64,23 @@ class ExportType extends AbstractType
                     'documentation' => [
                         'type' => 'string',
                         'example' => '2021-05-09',
-                        'format' => 'date'
-                    ]
+                        'format' => 'date',
+                    ],
                 ]
             )
         ;
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => TasksExportDTO::class,
             'constraints' => [
-                new Constraints\Callback([$this, 'validate'])
-            ]
+                new Constraints\Callback([$this, 'validate']),
+            ],
         ]);
     }
 
-    /**
-     * @param TasksExportDTO $exportDTO
-     * @param ExecutionContextInterface $context
-     */
     public function validate(TasksExportDTO $exportDTO, ExecutionContextInterface $context): void
     {
         if ($exportDTO->getStartDate() > $exportDTO->getEndDate()) {

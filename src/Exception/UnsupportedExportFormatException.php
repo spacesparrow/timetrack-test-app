@@ -9,12 +9,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UnsupportedExportFormatException extends Exception
 {
-    /** @var string  */
+    /** @var string */
     protected $message = 'Provided type %s not allowed for import';
 
     /**
      * UnsupportedExportFormatException constructor.
-     * @param string $extension
      */
     public function __construct(string $extension)
     {

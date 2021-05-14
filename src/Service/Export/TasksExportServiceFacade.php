@@ -15,7 +15,6 @@ class TasksExportServiceFacade
 
     /**
      * TasksExportServiceFacade constructor.
-     * @param iterable $exportServices
      */
     public function __construct(iterable $exportServices)
     {
@@ -23,8 +22,6 @@ class TasksExportServiceFacade
     }
 
     /**
-     * @param TasksExportDTO $tasksExportDTO
-     * @return TasksExportResponseDTO
      * @throws UnsupportedExportFormatException
      */
     public function export(TasksExportDTO $tasksExportDTO): TasksExportResponseDTO

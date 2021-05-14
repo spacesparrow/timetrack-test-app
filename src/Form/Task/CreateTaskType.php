@@ -15,10 +15,6 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class CreateTaskType extends AbstractType
 {
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -29,12 +25,12 @@ class CreateTaskType extends AbstractType
                     'required' => true,
                     'constraints' => [
                         new Constraints\NotBlank(),
-                        new Constraints\Length(['min' => Task::MIN_TITLE_LENGTH, 'max' => Task::MAX_TITLE_LENGTH])
+                        new Constraints\Length(['min' => Task::MIN_TITLE_LENGTH, 'max' => Task::MAX_TITLE_LENGTH]),
                     ],
                     'documentation' => [
                         'type' => 'string',
-                        'example' => 'First ever task'
-                    ]
+                        'example' => 'First ever task',
+                    ],
                 ]
             )
             ->add(
@@ -44,12 +40,12 @@ class CreateTaskType extends AbstractType
                     'required' => true,
                     'constraints' => [
                         new Constraints\NotBlank(),
-                        new Constraints\Length(['min' => Task::MIN_COMMENT_LENGTH, 'max' => Task::MAX_COMMENT_LENGTH])
+                        new Constraints\Length(['min' => Task::MIN_COMMENT_LENGTH, 'max' => Task::MAX_COMMENT_LENGTH]),
                     ],
                     'documentation' => [
                         'type' => 'string',
-                        'example' => 'First ever task for me in the system'
-                    ]
+                        'example' => 'First ever task for me in the system',
+                    ],
                 ]
             )
             ->add(
@@ -59,13 +55,13 @@ class CreateTaskType extends AbstractType
                     'required' => true,
                     'constraints' => [
                         new Constraints\NotBlank(),
-                        new Constraints\PositiveOrZero()
+                        new Constraints\PositiveOrZero(),
                     ],
                     'documentation' => [
                         'type' => 'integer',
                         'example' => 15,
-                        'minimum' => 0
-                    ]
+                        'minimum' => 0,
+                    ],
                 ]
             )
             ->add(
@@ -80,29 +76,22 @@ class CreateTaskType extends AbstractType
                     'documentation' => [
                         'type' => 'string',
                         'example' => '2021-05-08',
-                        'format' => 'date'
-                    ]
+                        'format' => 'date',
+                    ],
                 ]
             );
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Task::class,
             'constraints' => [
-                new Constraints\Callback([$this, 'validate'])
-            ]
+                new Constraints\Callback([$this, 'validate']),
+            ],
         ]);
     }
 
-    /**
-     * @param Task $task
-     * @param ExecutionContextInterface $context
-     */
     public function validate(Task $task, ExecutionContextInterface $context): void
     {
         if ($task->getCreatedDate() > new DateTime()) {

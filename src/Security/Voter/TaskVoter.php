@@ -18,8 +18,7 @@ class TaskVoter extends Voter
 
     /**
      * @param string $attribute
-     * @param mixed $subject
-     * @return bool
+     * @param mixed  $subject
      */
     protected function supports($attribute, $subject): bool
     {
@@ -28,9 +27,7 @@ class TaskVoter extends Voter
 
     /**
      * @param string $attribute
-     * @param mixed $subject
-     * @param TokenInterface $token
-     * @return bool
+     * @param mixed  $subject
      */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
     {
@@ -53,21 +50,11 @@ class TaskVoter extends Voter
         }
     }
 
-    /**
-     * @param Task $task
-     * @param UserInterface $user
-     * @return bool
-     */
     private function canCreate(Task $task, UserInterface $user): bool
     {
         return true;
     }
 
-    /**
-     * @param Task $task
-     * @param UserInterface $user
-     * @return bool
-     */
     private function canView(Task $task, UserInterface $user): bool
     {
         return $user === $task->getUser();
