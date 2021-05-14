@@ -20,6 +20,10 @@
  - For checking code style execute `docker-compose exec php composer check-cs`
  - For fixing code style execute `docker-compose exec php composer fix-cs`
 
+# **Demo launch**
+There are data prepared for demo launch. Run `docker-compose exec php php bin/console doctrine:fixtures:load --group=demo` to fill database with it.
+Please note that all data stored in database will be purged after fixtures loading 
+
 # **Managing .env**
 By default, Docker load env variables from `.env` file located in the same directory as `docker-compose.yml`.
 
