@@ -10,6 +10,7 @@ use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -55,5 +56,15 @@ class TaskRepository extends ServiceEntityRepository
         $tasks = $qb->getQuery()->getResult();
 
         return new ArrayCollection($tasks);
+    }
+
+    public function findByUserQuery(User $user): Query
+    {
+        $qb = $this->createQueryBuilder(self::TP_SELF);
+        $qb->where(self::TP_SELF.'.user = :user');
+        $qb->setParameter('user', $user);
+        $qb->orderBy(self::TP_SELF.'.createdDate', 'DESC');
+
+        return $qb->getQuery();
     }
 }

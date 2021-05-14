@@ -62,4 +62,15 @@ class BaseController extends AbstractFOSRestController
             $responseDTO->getFilename()
         );
     }
+
+    /*
+     * Create submitted provided FormType with request query data and object with if if passed
+     */
+    public function createGetForm(string $typeClass, Request $request, object $object = null): FormInterface
+    {
+        $form = $this->createForm($typeClass, $object);
+        $form->submit($request->query->all());
+
+        return $form;
+    }
 }

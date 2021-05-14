@@ -8,6 +8,7 @@ use App\DTO\TasksExportDTO;
 use App\Entity\Task;
 use App\Entity\User;
 use App\Exception\UnsupportedExportFormatException;
+use App\Form\PaginatedType;
 use App\Form\Task\CreateTaskType;
 use App\Form\Task\ExportType;
 use App\Security\Voter\TaskVoter;
@@ -41,6 +42,13 @@ class TaskController extends BaseController
      *     tags={"Tasks"},
      *     summary="List all user tasks",
      *     description="List all tasks created by logged in user",
+     *     @OA\Parameter(
+     *         required=false,
+     *         in="query",
+     *         name="page",
+     *         description="Page number to get, must be positive number",
+     *         example=1
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Paginated list of Task entities created by logged in user, ordered by created date desc",
@@ -70,20 +78,53 @@ class TaskController extends BaseController
      *                 )
      *         )
      *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation failed",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(property="code", type="integer", example=422),
+     *                 @OA\Property(property="message", type="string", example="Validation Failed"),
+     *                 @OA\Property(
+     *                     property="errors",
+     *                     type="object",
+     *                     @OA\Property(
+     *                         property="children",
+     *                         type="object",
+     *                         @OA\Property(
+     *                             property="page",
+     *                             type="array",
+     *                             @OA\Items(example="This value should be positive.")
+     *                         ),
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     )
      * )
      * @Security(name="Bearer")
      */
     public function indexAction(Request $request, PaginatorInterface $paginator): Response
     {
+        /* create form with request query data */
+        $form = $this->createGetForm(PaginatedType::class, $request);
+
+        /* return response with messages if validation failed */
+        if (!$form->isValid()) {
+            return $this->badRequestResponse($form);
+        }
+
         /* get logged in user and it tasks */
         /** @var User $user */
         $user = $this->getUser();
-        $tasks = $this->taskService->getUserTasks($user);
+        $tasks = $this->taskService->getUserTasksQuery($user);
+        $paginatedRequestDTO = $form->getData();
 
         /* paginate user tasks  */
         $paginatedTasks = $paginator->paginate(
             $tasks,
-            $request->request->getInt('page', 1)
+            $paginatedRequestDTO->getPage() ?? 1
         );
 
         return $this->showResponse($paginatedTasks);

@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Repository\TaskRepository;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Query;
 
 class TaskService
 {
@@ -32,5 +33,13 @@ class TaskService
          * Select user tasks, filtered by date range, from database
          */
         return $this->taskRepository->findUserTasksFilteredByDateRange($user, $startDate, $endDate);
+    }
+
+    public function getUserTasksQuery(User $user): Query
+    {
+        /*
+         * Return Query object for paginating user tasks
+         */
+        return $this->taskRepository->findByUserQuery($user);
     }
 }
