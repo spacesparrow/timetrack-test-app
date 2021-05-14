@@ -18,3 +18,12 @@
  - For running unit test suite execute `docker-compose exec php composer test-unit`
  - For checking code style execute `docker-compose exec php composer check-cs`
  - For fixing code style execute `docker-compose exec php composer fix-cs`
+
+# **Managing .env**
+By default, Docker load env variables from `.env` file located in the same directory as `docker-compose.yml`.
+
+To override these variables, Docker brings options `--env-file=path/to/file` which should be passed to each `docker-compose` command you running.
+For example: `docker-compose --env-file=.env.local build` will build containers with vars mentioned in `.env.local`
+
+### Note
+If you built and up docker containers with different `APP_URL` or `NGINX_PORT` variables, your host and API docs URL will be changed
