@@ -7,6 +7,7 @@ namespace App\Tests\Unit\Form;
 use App\DTO\PaginatedRequestDTO;
 use App\Form\PaginatedType;
 use Generator;
+use Nelmio\ApiDocBundle\Form\Extension\DocumentationExtension;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -123,7 +124,14 @@ class PaginatedTypeTest extends TypeTestCase
 
         return [
             new PreloadedExtension([$paginatedType], []),
-            new ValidatorExtension($validator),
+            new ValidatorExtension($validator)
+        ];
+    }
+
+    protected function getTypeExtensions(): array
+    {
+        return [
+            new DocumentationExtension()
         ];
     }
 }

@@ -21,7 +21,11 @@ class PaginatedType extends AbstractType
                     'required' => false,
                     'constraints' => [
                         new Constraints\Positive(),
-                    ]
+                    ],
+                    'documentation' => [
+                        'type' => 'integer',
+                        'example' => 1,
+                    ],
                 ]
             );
     }
