@@ -54,3 +54,13 @@ services:
     App\Service\Export\TasksExportServiceFacade:
         class: App\Service\Export\TasksExportServiceFacade
         arguments: [!tagged {tag: app.tasks_export_service}]
+
+    acme_api.event.authentication_success_listener:
+        class: App\EventListener\AuthenticationSuccessListener
+        arguments: [ '%lexik_jwt_authentication.token_ttl%' ]
+        tags:
+            - {
+              name: kernel.event_listener,
+              event: lexik_jwt_authentication.on_authentication_success,
+              method: onAuthenticationSuccessResponse
+            }

@@ -39,15 +39,23 @@ nelmio_api_doc:
               type: string
               readOnly: true
               example: exampleTokenString
+              description: JWT token string needed to perform authorized operations
+            lifetime:
+              type: integer
+              readOnly: true
+              example: 10800
+              description: Token lifetime in seconds
         Credentials:
           type: object
           properties:
             email:
               type: string
               example: example@domain.com
+              description: User email
             password:
               type: string
               example: somepassword
+              description: User password
         BadCredentials:
           type: object
           properties:
