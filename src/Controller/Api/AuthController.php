@@ -8,7 +8,6 @@ use App\Entity\User;
 use App\Form\Auth\RegisterType;
 use App\Manager\GeneralDoctrineManager;
 use App\Service\AuthService;
-use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;

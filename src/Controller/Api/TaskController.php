@@ -15,7 +15,6 @@ use App\Manager\GeneralDoctrineManager;
 use App\Security\Voter\TaskVoter;
 use App\Service\Export\TasksExportServiceFacade;
 use App\Service\TaskService;
-use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Knp\Component\Pager\PaginatorInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
