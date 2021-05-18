@@ -6,8 +6,10 @@ namespace App\Controller\Api;
 
 use App\Entity\User;
 use App\Form\Auth\RegisterType;
+use App\Manager\GeneralDoctrineManager;
 use App\Service\AuthService;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Annotations as OA;
@@ -21,13 +23,15 @@ use Symfony\Component\Routing\Annotation\Route;
 class AuthController extends BaseController
 {
     private AuthService $authService;
+    private GeneralDoctrineManager $doctrineManager;
 
     /**
      * AuthController constructor.
      */
-    public function __construct(AuthService $authService)
+    public function __construct(AuthService $authService, GeneralDoctrineManager $doctrineManager)
     {
         $this->authService = $authService;
+        $this->doctrineManager = $doctrineManager;
     }
 
     /**
@@ -82,8 +86,10 @@ class AuthController extends BaseController
      *     )
      * )
      * @Security()
+     *
+     * @throws Exception
      */
-    public function registerAction(Request $request, EntityManagerInterface $manager): Response
+    public function registerAction(Request $request): Response
     {
         /* create empty user and fill it with request data */
         $user = new User();
@@ -99,8 +105,7 @@ class AuthController extends BaseController
         /* encode provided password */
         $this->authService->encodeUserPassword($user);
         /* save created user in database */
-        $manager->persist($user);
-        $manager->flush();
+        $this->doctrineManager->save($user);
 
         /* redirect created user to login endpoint */
         return $this->redirectToRoute(

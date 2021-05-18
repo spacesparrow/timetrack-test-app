@@ -11,10 +11,12 @@ use App\Exception\UnsupportedExportFormatException;
 use App\Form\PaginatedType;
 use App\Form\Task\CreateTaskType;
 use App\Form\Task\ExportType;
+use App\Manager\GeneralDoctrineManager;
 use App\Security\Voter\TaskVoter;
 use App\Service\Export\TasksExportServiceFacade;
 use App\Service\TaskService;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Knp\Component\Pager\PaginatorInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
@@ -30,10 +32,12 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class TaskController extends BaseController
 {
     private TaskService $taskService;
+    private GeneralDoctrineManager $doctrineManager;
 
-    public function __construct(TaskService $taskService)
+    public function __construct(TaskService $taskService, GeneralDoctrineManager $doctrineManager)
     {
         $this->taskService = $taskService;
+        $this->doctrineManager = $doctrineManager;
     }
 
     /**
@@ -273,8 +277,10 @@ class TaskController extends BaseController
      *     )
      * )
      * @Security(name="Bearer")
+     *
+     * @throws Exception
      */
-    public function createAction(Request $request, EntityManagerInterface $manager): Response
+    public function createAction(Request $request): Response
     {
         $task = new Task();
         /* deny access to task creation if logged in user can not perform this action */
@@ -292,8 +298,7 @@ class TaskController extends BaseController
 
         /* attach user to the task and save it in database */
         $task->setUser($user);
-        $manager->persist($task);
-        $manager->flush();
+        $this->doctrineManager->save($task);
 
         /* return response with absolute url to created task in Location header */
         return $this->createdResponse(
